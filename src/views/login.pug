@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Login page
+        link(rel="stylesheet", href="/css/styles.css")
+    body 
+    div.wrap
+        form(action="/login", method="post") 
+            h2 Sign in
+            div.container
+                label(for="uname") Username 
+                input#username(type="text", name="username", placeholder="Enter Username")
+                label(for="psw") Password
+                input#password(type="password", name="password", placeholder="Enter Password") 
+                button(type="submit") Login 
+                input#cbox(type="checkbox", name="remember")
+                label Remember Me
+                span.psw Forgot 
+                    a(style="color: blue") Username/Password
+            div.centerW
+                    p Don't have an account?
+                    p(style="color: red") Sign Up Now
