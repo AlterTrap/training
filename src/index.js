@@ -48,10 +48,6 @@ app.get('/index', function (req, res) {
     res.render('index', {username: username, password: password});
 });
 
-// app.listen(port, () => {
-//     console.log(`App is running on port ${port}`)
-// })
-
 mongoConnect(() => {
     app.listen(port);
   });
