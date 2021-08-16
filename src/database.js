@@ -5,8 +5,10 @@ let _db;
 
 const mongoConnect = callback => {
   MongoClient.connect(
-    'mongodb://localhost:27017/shopping'
-  )
+    'mongodb://localhost:27017/shopping',{
+      useNewUrlParser: true, 
+      useUnifiedTopology: true
+    })
     .then(client => {
       console.log('Connected!');
       _db = client.db();

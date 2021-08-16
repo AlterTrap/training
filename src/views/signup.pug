@@ -10,10 +10,12 @@ html(lang="en")
         form(action="/signup", method="post") 
             h2 Sign up
             div.container
+                div(style="color: red")= msg
                 label(for="uname") Username 
-                input#username(type="text", name="username", placeholder="Enter Username")
+                input#username(type="text", name="username", placeholder="Enter Username", required)
                 label(for="psw") Password
-                input#password(type="password", name="password", placeholder="Enter Password") 
+                input#password(type="password", name="password", placeholder="Enter Password", required) 
                 label(for="pswCfm") Password Comfirm
-                input#passwordCfm(type="password", name="passwordCfm", placeholder="Enter Password Comfirm") 
+                input#passwordCfm(type="password", name="passwordCfm", placeholder="Enter Password Comfirm", required) 
                 button(type="submit") submit 
+                

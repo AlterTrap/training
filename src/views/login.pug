@@ -11,6 +11,7 @@ html(lang="en")
         form(action="/login", method="post") 
             h2 Sign in
             div.container
+                div(style="color: red")= msg
                 label(for="uname") Username 
                 input#username(type="text", name="username", placeholder="Enter Username")
                 label(for="psw") Password
