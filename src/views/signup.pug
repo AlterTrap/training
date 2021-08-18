@@ -7,6 +7,7 @@ html(lang="en")
         title Sign up
         link(rel="stylesheet", href="/css/styles.css")
     body 
+    div.wrap
         form(action="/signup", method="post") 
             h2 Sign up
             div.container
@@ -18,3 +19,6 @@ html(lang="en")
                 label(for="pswCfm") Password Comfirm
                 input#passwordCfm(type="password", name="passwordCfm", placeholder="Enter Password Comfirm", required) 
                 button(type="submit") submit 
+                div.centerW
+                    a(href="/login",style="color: red") Already have account!
+
