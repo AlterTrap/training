@@ -28,17 +28,22 @@ app.post('/signup', function (req, res) {
     const password = req.body.password;
     const passwordCfm = req.body.passwordCfm;
     const db = getDb();
+    let hash = '';
     
-    if(password.charAt(0) !== password.charAt(0).toUpperCase()){
-        res.render('signup', {msg: 'Password require first letter is uppercase'})
+    if(password.search(/[A-Z]/) < 0){
+        res.render('signup', {msg: 'Password require one letter is uppercase'})
     }
 
     // Check length in Username, Password and Password Comfirm
     if (username.length < 6) {
         res.render('signup', {msg: 'Username not enough 6 letters'})
-    }if(password.length < 6) {
+    }
+    
+    if(password.length < 6) {
         res.render('signup', {msg: 'Password not enough 6 letters'})
-    }if(passwordCfm.length < 6){
+    }
+    
+    if(passwordCfm.length < 6){
         res.render('signup', {msg: 'Password comfirm not enough 6 letters'})
     }
 
@@ -52,13 +57,12 @@ app.post('/signup', function (req, res) {
                 bcrypt.genSalt(10)
                 .then(salt => {
                     // Hash password
-                    bcrypt.hash(password, salt)
-                    .then(hash => {
-                        let cusAcc = {username: username, password: hash}
-                        // Save user info to DB
-                        db.collection('users').insertOne(cusAcc);
-                        return res.redirect('/index?username=' + username)
-                    })
+                    return hash = bcrypt.hash(password, salt)})
+                .then(hash => {
+                    let cusAcc = {username: username, password: hash}
+                    // Save user info to DB
+                    db.collection('users').insertOne(cusAcc);
+                    return res.redirect('/index?username=' + username)
                 })
             } else {
                 res.render('signup',{msg: 'Username already exist'});
@@ -79,7 +83,9 @@ app.post('/login', function (req, res) {
     // Check length in Username and Password
     if (username.length < 6) {
         res.render('signup', {msg: 'Username not enough 6 letters'})
-    }if(password.length < 6) {
+    }
+    
+    if(password.length < 6) {
         res.render('signup', {msg: 'Password not enough 6 letters'})
     }
 
@@ -93,6 +99,7 @@ app.post('/login', function (req, res) {
             if (error) {
                 throw error;
             }
+            
             if (result) {
                 res.redirect('/index?username=' + username)
             } else {
