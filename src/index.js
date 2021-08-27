@@ -159,24 +159,6 @@ app.post('/login', function (req, res, next) {
             return res.redirect('/index');
         });
       })(req, res, next);
-    // // Find info user in DB
-    // db.collection('users').findOne({username})
-    // .then(user => {
-    //     if (!user) return {msg: "user not exist"}
-
-    //     // Compare Password in client with password DB
-    //     bcrypt.compare(password, user.password, function(error, result){
-    //         if (error) {
-    //             return res.render('login', {usernameholder: username, msg: 'Password not enough 6 letters'})
-    //         }
-            
-    //         if (result) {
-    //             return res.redirect('/index?username=' + username)
-    //         } else {
-    //             return res.render('login',{usernameholder: username, msg: 'Username or Password not correct'})
-    //         }
-    //     })
-    // })
 });
 
 app.get('/index',ensureAuthenticated, function (req, res) {
