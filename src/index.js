@@ -152,11 +152,8 @@ app.post("/signup", function (req, res) {
 							let cusAcc = { username: username, password: hash };
 							// Save user info to DB
 							db.collection("users").insertOne(cusAcc);
-							passport.authenticate("local")(
-								req,
-								res,
-								function () {
-									res.redirect("/");
+							passport.authenticate("local")(req,res,function () {
+								res.redirect("/");
 								}
 							);
 						});
