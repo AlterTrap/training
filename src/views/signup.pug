@@ -7,13 +7,18 @@ html(lang="en")
         title Sign up
         link(rel="stylesheet", href="/css/styles.css")
     body 
+    div.wrap
         form(action="/signup", method="post") 
             h2 Sign up
             div.container
+                div(style="color: red")= msg
                 label(for="uname") Username 
-                input#username(type="text", name="username", placeholder="Enter Username")
+                input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder)
                 label(for="psw") Password
                 input#password(type="password", name="password", placeholder="Enter Password") 
                 label(for="pswCfm") Password Comfirm
                 input#passwordCfm(type="password", name="passwordCfm", placeholder="Enter Password Comfirm") 
                 button(type="submit") submit 
+                div.centerW
+                    a(href="/login",style="color: red") Already have account!
+
