@@ -67,7 +67,7 @@ app.use(
     })
 );
 
-function checkLength(val){
+function checkLength(val) {
     // Check length in Username, Password and Password Comfirm
     if (val.length < 6) {
         return true;
@@ -76,7 +76,7 @@ function checkLength(val){
     }
 }
 
-function checkUpscale(val){
+function checkUpscale(val) {
     // Check if there is a uppscale letter in password
     if (val.search(/[A-Z]/) < 0) {
         return true;
@@ -127,20 +127,32 @@ app.post("/signup", function (req, res) {
     const checkPasswordCfm = checkLength(passwordCfm);
     const checkUps = checkUpscale(password);
 
-    if(checkUsername){
-        return res.render('signup', {usernameholder: username, msg: 'Username Not enough 6 letters'})
+    if (checkUsername) {
+        return res.render("signup", {
+            usernameholder: username,
+            msg: "Username Not enough 6 letters",
+        });
     }
 
-    if(checkPassword){
-        return res.render('signup', {usernameholder: username, msg: 'Passsword Not enough 6 letters'})
+    if (checkPassword) {
+        return res.render("signup", {
+            usernameholder: username,
+            msg: "Passsword Not enough 6 letters",
+        });
     }
 
-    if(checkPasswordCfm){
-        return res.render('signup', {usernameholder: username, msg: 'Passsword Comfirm Not enough 6 letters'})
+    if (checkPasswordCfm) {
+        return res.render("signup", {
+            usernameholder: username,
+            msg: "Passsword Comfirm Not enough 6 letters",
+        });
     }
 
-    if(checkUps){
-        return res.render('signup', {usernameholder: username, msg: 'Password require 1 upscale letter'})
+    if (checkUps) {
+        return res.render("signup", {
+            usernameholder: username,
+            msg: "Password require 1 upscale letter",
+        });
     }
 
     // Check password and password comfirm
@@ -150,24 +162,26 @@ app.post("/signup", function (req, res) {
             .then((user) => {
                 //check user already in DB or not
                 if (!user) {
-                    return bcrypt.genSalt(10)
+                    return bcrypt.genSalt(10);
                 } else {
                     return res.render("signup", {
                         usernameholder: username,
                         msg: "Username already exist",
                     });
                 }
-            }).then((salt) => {
+            })
+            .then((salt) => {
                 // Hash password
                 return bcrypt.hash(password, salt);
-            }).then((hash) => {
+            })
+            .then((hash) => {
                 let cusAcc = { username: username, password: hash };
                 // Save user info to DB
                 db.collection("users").insertOne(cusAcc);
-                passport.authenticate("local")(req,res,function () {
+                passport.authenticate("local")(req, res, function () {
                     res.redirect("/");
                 });
-            });;
+            });
     } else {
         return res.render("signup", {
             usernameholder: username,
@@ -183,16 +197,25 @@ app.post("/login", function (req, res, next) {
     const CheckPassword = checkLength(password);
     const checkUps = checkUpscale(password);
 
-    if(checkUsername){
-        return res.render('login',{usernameholder: username, msg: 'Username not enough 6 letters'})
+    if (checkUsername) {
+        return res.render("login", {
+            usernameholder: username,
+            msg: "Username not enough 6 letters",
+        });
     }
 
-    if(CheckPassword){
-        return res.render('login',{usernameholder: username, msg: 'Password not enough 6 letters'})
+    if (CheckPassword) {
+        return res.render("login", {
+            usernameholder: username,
+            msg: "Password not enough 6 letters",
+        });
     }
 
-    if(checkUps){
-        return res.render('login', {usernameholder: username, msg: 'Password require 1 upscale letter'})
+    if (checkUps) {
+        return res.render("login", {
+            usernameholder: username,
+            msg: "Password require 1 upscale letter",
+        });
     }
 
     passport.authenticate("local", function (err, user, info) {
@@ -220,7 +243,7 @@ app.get("/", ensureAuthenticated, function (req, res) {
 
 app.get("/logout", function (req, res) {
     req.logout();
-    res.redirect('/login');
+    res.redirect("/login");
 });
 
 mongoConnect(() => {
