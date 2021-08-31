@@ -49,6 +49,7 @@ passport.serializeUser((user, done) => {
     );
     return done(null, user.username);
 });
+
 passport.deserializeUser(function (username, done) {
     const db = getDb();
     db.collection("users").findOne(
@@ -57,6 +58,12 @@ passport.deserializeUser(function (username, done) {
             return done(err, user);
         }
     );
+});
+
+app.use(function(req, res, next) {
+    if (!req.user)
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
 });
 
 app.use(
@@ -69,14 +76,14 @@ app.use(
 
 function checkLength(val) {
     // Check length in Username, Password and Password Comfirm
-    if (val.length < 6) {
+    if (val.length >= 6) {
         return true;
     } else {
         return false;
     }
 }
 
-function checkUpscale(val) {
+function oneUpscalePass(val) {
     // Check if there is a uppscale letter in password
     if (val.search(/[A-Z]/) < 0) {
         return true;
@@ -125,23 +132,23 @@ app.post("/signup", function (req, res) {
     const checkUsername = checkLength(username);
     const checkPassword = checkLength(password);
     const checkPasswordCfm = checkLength(passwordCfm);
-    const checkUps = checkUpscale(password);
+    const checkUps = oneUpscalePass(password);
 
-    if (checkUsername) {
+    if (!(checkUsername)) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Username Not enough 6 letters",
         });
     }
 
-    if (checkPassword) {
+    if (!(checkPassword)) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Passsword Not enough 6 letters",
         });
     }
 
-    if (checkPasswordCfm) {
+    if (!(checkPasswordCfm)) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Passsword Comfirm Not enough 6 letters",
@@ -195,16 +202,16 @@ app.post("/login", function (req, res, next) {
     const password = req.body.password;
     const checkUsername = checkLength(username);
     const CheckPassword = checkLength(password);
-    const checkUps = checkUpscale(password);
+    const checkUps = oneUpscalePass(password);
 
-    if (checkUsername) {
+    if (!(checkUsername)) {
         return res.render("login", {
             usernameholder: username,
             msg: "Username not enough 6 letters",
         });
     }
 
-    if (CheckPassword) {
+    if (!(CheckPassword)) {
         return res.render("login", {
             usernameholder: username,
             msg: "Password not enough 6 letters",
