@@ -6,4 +6,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Hello there
     body 
-        a Hello #{username}
+        form(action="/logout", method="get") 
+            a Hello #{username}
+            br
+            button(type="submit") Logout 
