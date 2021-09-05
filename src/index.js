@@ -9,6 +9,7 @@ const app = express();
 const port = 3000;
 const mongoConnect = require("../src/database").mongoConnect;
 const getDb = require("../src/database").getDb; // Just attach the function name to the variable
+const { resolveSoa } = require("dns");
 
 passport.use(
     new LocalStrategy({ usernameField: "username" }, function (
@@ -60,9 +61,12 @@ passport.deserializeUser(function (username, done) {
     );
 });
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     if (!req.user)
-        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        res.header(
+            "Cache-Control",
+            "private, no-cache, no-store, must-revalidate"
+        );
     next();
 });
 
@@ -134,21 +138,21 @@ app.post("/signup", function (req, res) {
     const checkPasswordCfm = checkLength(passwordCfm);
     const checkUps = oneUpscalePass(password);
 
-    if (!(checkUsername)) {
+    if (!checkUsername) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Username Not enough 6 letters",
         });
     }
 
-    if (!(checkPassword)) {
+    if (!checkPassword) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Passsword Not enough 6 letters",
         });
     }
 
-    if (!(checkPasswordCfm)) {
+    if (!checkPasswordCfm) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Passsword Comfirm Not enough 6 letters",
@@ -204,14 +208,14 @@ app.post("/login", function (req, res, next) {
     const CheckPassword = checkLength(password);
     const checkUps = oneUpscalePass(password);
 
-    if (!(checkUsername)) {
+    if (!checkUsername) {
         return res.render("login", {
             usernameholder: username,
             msg: "Username not enough 6 letters",
         });
     }
 
-    if (!(CheckPassword)) {
+    if (!CheckPassword) {
         return res.render("login", {
             usernameholder: username,
             msg: "Password not enough 6 letters",
@@ -244,8 +248,29 @@ app.post("/login", function (req, res, next) {
 });
 
 app.get("/", ensureAuthenticated, function (req, res) {
+    const db = getDb();
     const username = req.session.passport.user;
-    res.render("index", { username: username });
+    db.collection("users")
+        .find({}, { projection: { username: 1, name: 1, birthday: 1 } })
+        .toArray(function (err, userLists) {
+            if (err) throw err;
+            res.render("index", { username: username, userLists: userLists });
+        });
+});
+
+app.post("/", ensureAuthenticated, function (req, res) {
+    const db = getDb();
+    const searchName = req.body.searchUser;
+    const username = req.session.passport.user;
+    db.collection("users")
+        .find(
+            { username: { $regex: "^" + searchName + "", $options: "i" } },
+            { projection: { username: 1, name: 1, birthday: 1 } }
+        )
+        .toArray(function (err, userLists) {
+            if (err) throw err;
+            res.render("index", { username: username, userLists: userLists });
+        });
 });
 
 app.get("/logout", function (req, res) {

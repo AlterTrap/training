@@ -10,3 +10,23 @@ html(lang="en")
             a Hello #{username}
             br
             button(type="submit") Logout 
+        form(action="/", method="post") 
+            label(for="searchUser") Search Users
+            br
+            input#searchUser(type="searchUser", name="searchUser")
+            br
+            button(type="submit") submit 
+    H User Lists
+        table(width='100%', cellspacing='0', cellpadding='0', border='1', bgcolor='#F2F2F2')
+            thead
+                tr
+                    th Username
+                    th Name
+                    th Birth Day
+            tbody
+            if userLists
+            each accounts in userLists
+                tr
+                    td #{accounts.username}
+                    td #{accounts.name}
+                    td #{accounts.birthday}
