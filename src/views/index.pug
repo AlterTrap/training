@@ -50,11 +50,11 @@ html(lang="en")
                     if searchUser == null
                         a(href='/?page='+`${i}`)= i++
                         if current == i 
-                            a.active(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++ 
+                            a.active= i++ 
                     else 
                         a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++
                         if current == i 
-                            a.active(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++ 
+                            a.active= i++ 
                 if current < pages
                     if searchUser == null
                         a(href=`${parseInt(current) + 1}`) Next
