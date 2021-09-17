@@ -9,7 +9,6 @@ const app = express();
 const port = 3000;
 const mongoConnect = require("../src/database").mongoConnect;
 const getDb = require("../src/database").getDb; // Just attach the function name to the variable
-const { cursorTo } = require("readline");
 
 passport.use(
     new LocalStrategy({ usernameField: "username" }, function (
