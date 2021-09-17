@@ -33,19 +33,37 @@ html(lang="en")
                     td #{accounts.birthday}   
         div.pagination
             ul
+                if current == 1
+                    a.disabled First
+                else 
+                    if searchUser == null
+                        a(href='/?page=' + 1) First
+                    else
+                        a(href='/?searchUser='+ `${searchUser}` + '&page=' + 1 ) First
                 if current > 1
                     if searchUser == null
-                        a(href=`${parseInt(current) - 1}`) Previous
+                        a(href='/?page=' +`${parseInt(current) - 1}`) Previous
                     else 
                         a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) - 1}`) Previous
                 - var i = 1
-                while i <= pages
+                while i <= pages 
                     if searchUser == null
-                        a(href=`${i}`)= i++
+                        a(href='/?page='+`${i}`)= i++
+                        if current == i 
+                            a.active(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++ 
                     else 
                         a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++
+                        if current == i 
+                            a.active(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++ 
                 if current < pages
                     if searchUser == null
                         a(href=`${parseInt(current) + 1}`) Next
                     else 
                         a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) + 1}`) Next
+                if current == pages 
+                    a.disabled Last
+                else 
+                    if searchUser == null
+                        a(href='/?page=' + `${pages}`) Last
+                    else 
+                        a(href='/?searchUser='+ `${searchUser}` + '&page=' + `${pages}` ) Last
