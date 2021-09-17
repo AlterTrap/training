@@ -257,54 +257,80 @@ app.get("/", ensureAuthenticated, function (req, res, next) {
     const searchName = req.query.searchUser;
     let perPage = 1;
     let page = req.query.page || 1;
-    if (searchName == null){
-        db.collection("users").find({})
-        .count(function(err, count){
-            db.collection("users")
+    if (searchName == null) {
+        db.collection("users")
             .find({})
-            .skip((perPage * page) - perPage)
-            .limit(perPage)
-            .toArray(function (err, userLists) {
-                if (err) throw next(err);
-                res.render("index", { username: username, userLists: userLists,current: page,pages: Math.ceil(count / perPage) });
-            })
-        })
+            .count(function (err, count) {
+                db.collection("users")
+                    .find({})
+                    .skip(perPage * page - perPage)
+                    .limit(perPage)
+                    .toArray(function (err, userLists) {
+                        if (err) throw next(err);
+                        res.render("index", {
+                            username: username,
+                            userLists: userLists,
+                            current: page,
+                            pages: Math.ceil(count / perPage),
+                        });
+                    });
+            });
     } else {
-        db.collection("users").find(
-            { username: { $regex: "^" + searchName + "", $options: "i" } },
-            { projection: { username: 1, name: 1, birthday: 1 } })
-        .count(function(err, count){
-            db.collection("users")
+        db.collection("users")
             .find(
                 { username: { $regex: "^" + searchName + "", $options: "i" } },
                 { projection: { username: 1, name: 1, birthday: 1 } }
-            ).skip((perPage * page) - perPage)
-            .limit(perPage)
-            .toArray(function (err, userLists) {
-                if (err) throw err;
-                res.render("index", { username: username,searchUser:searchName, userLists: userLists,current: page,pages: Math.ceil(count / perPage) });
-            })
-        })
+            )
+            .count(function (err, count) {
+                db.collection("users")
+                    .find(
+                        {
+                            username: {
+                                $regex: "^" + searchName + "",
+                                $options: "i",
+                            },
+                        },
+                        { projection: { username: 1, name: 1, birthday: 1 } }
+                    )
+                    .skip(perPage * page - perPage)
+                    .limit(perPage)
+                    .toArray(function (err, userLists) {
+                        if (err) throw err;
+                        res.render("index", {
+                            username: username,
+                            searchUser: searchName,
+                            userLists: userLists,
+                            current: page,
+                            pages: Math.ceil(count / perPage),
+                        });
+                    });
+            });
     }
 });
 
 app.get("/:page", ensureAuthenticated, function (req, res) {
     const db = getDb();
     const username = req.session.passport.user;
-    const searchName = req.query.searchUser
+    const searchName = req.query.searchUser;
     let perPage = 1;
     let page = req.params.page || 1;
-        db.collection("users").find({})
-        .count(function(err, count){
+    db.collection("users")
+        .find({})
+        .count(function (err, count) {
             db.collection("users")
-            .find({})
-            .skip((perPage * page) - perPage)
-            .limit(perPage)
-            .toArray(function (err, userLists) {
-                if (err) throw err;
-                res.render("index", { username: username, userLists: userLists,current: page,pages: Math.ceil(count / perPage) });
-            })
-        })
+                .find({})
+                .skip(perPage * page - perPage)
+                .limit(perPage)
+                .toArray(function (err, userLists) {
+                    if (err) throw err;
+                    res.render("index", {
+                        username: username,
+                        userLists: userLists,
+                        current: page,
+                        pages: Math.ceil(count / perPage),
+                    });
+                });
+        });
 });
 
 mongoConnect(() => {
