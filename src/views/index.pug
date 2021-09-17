@@ -5,19 +5,20 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Hello there
+        link(rel="stylesheet", href="/css/pagination.css")
     body 
         form(action="/logout", method="get") 
             a Hello #{username}
             br
-            button(type="submit") Logout 
-        form(action="/", method="post") 
+            button(type="submit" href='/logout') Logout 
+        form(action="/", method="get") 
             label(for="searchUser") Search Users
             br
             input#searchUser(type="searchUser", name="searchUser")
             br
             button(type="submit") submit 
     H User Lists
-        table(width='100%', cellspacing='0', cellpadding='0', border='1', bgcolor='#F2F2F2')
+        table(width='100%', cellspacing='1', cellpadding='1', border='1', bgcolor='#F2F2F2')
             thead
                 tr
                     th Username
@@ -29,4 +30,23 @@ html(lang="en")
                 tr
                     td #{accounts.username}
                     td #{accounts.name}
-                    td #{accounts.birthday}
+                    td #{accounts.birthday}   
+        div.pagination
+            ul
+                if current > 1
+                    if searchUser == null
+                        a(href=`${parseInt(current) - 1}`) Previous
+                    else 
+                        a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) - 1}`) Previous
+                - var i = 1
+                while i <= pages
+                    if searchUser == null
+                        a(href=`${i}`)= i++
+                    else 
+                        a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++
+                if current < pages
+                    if searchUser == null
+                        a(href=`${parseInt(current) + 1}`) Next
+                    else 
+                        a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) + 1}`) Next
+                        

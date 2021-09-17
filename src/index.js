@@ -9,6 +9,7 @@ const app = express();
 const port = 3000;
 const mongoConnect = require("../src/database").mongoConnect;
 const getDb = require("../src/database").getDb; // Just attach the function name to the variable
+const { cursorTo } = require("readline");
 
 passport.use(
     new LocalStrategy({ usernameField: "username" }, function (
@@ -246,35 +247,65 @@ app.post("/login", function (req, res, next) {
     })(req, res, next);
 });
 
-app.get("/", ensureAuthenticated, function (req, res) {
-    const db = getDb();
-    const username = req.session.passport.user;
-    db.collection("users")
-        .find({}, { projection: { username: 1, name: 1, birthday: 1 } })
-        .toArray(function (err, userLists) {
-            if (err) throw err;
-            res.render("index", { username: username, userLists: userLists });
-        });
-});
-
-app.post("/", ensureAuthenticated, function (req, res) {
-    const db = getDb();
-    const searchName = req.body.searchUser;
-    const username = req.session.passport.user;
-    db.collection("users")
-        .find(
-            { username: { $regex: "^" + searchName + "", $options: "i" } },
-            { projection: { username: 1, name: 1, birthday: 1 } }
-        )
-        .toArray(function (err, userLists) {
-            if (err) throw err;
-            res.render("index", { username: username, userLists: userLists });
-        });
-});
-
 app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/login");
+});
+
+app.get("/", ensureAuthenticated, function (req, res, next) {
+    const db = getDb();
+    const username = req.session.passport.user;
+    const searchName = req.query.searchUser;
+    let perPage = 1;
+    let page = req.query.page || 1;
+    if (searchName == null){
+        db.collection("users").find({})
+        .count(function(err, count){
+            db.collection("users")
+            .find({})
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .toArray(function (err, userLists) {
+                if (err) throw next(err);
+                res.render("index", { username: username, userLists: userLists,current: page,pages: Math.ceil(count / perPage) });
+            })
+        })
+    } else {
+        db.collection("users").find(
+            { username: { $regex: "^" + searchName + "", $options: "i" } },
+            { projection: { username: 1, name: 1, birthday: 1 } })
+        .count(function(err, count){
+            db.collection("users")
+            .find(
+                { username: { $regex: "^" + searchName + "", $options: "i" } },
+                { projection: { username: 1, name: 1, birthday: 1 } }
+            ).skip((perPage * page) - perPage)
+            .limit(perPage)
+            .toArray(function (err, userLists) {
+                if (err) throw err;
+                res.render("index", { username: username,searchUser:searchName, userLists: userLists,current: page,pages: Math.ceil(count / perPage) });
+            })
+        })
+    }
+});
+
+app.get("/:page", ensureAuthenticated, function (req, res) {
+    const db = getDb();
+    const username = req.session.passport.user;
+    const searchName = req.query.searchUser
+    let perPage = 1;
+    let page = req.params.page || 1;
+        db.collection("users").find({})
+        .count(function(err, count){
+            db.collection("users")
+            .find({})
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .toArray(function (err, userLists) {
+                if (err) throw err;
+                res.render("index", { username: username, userLists: userLists,current: page,pages: Math.ceil(count / perPage) });
+            })
+        })
 });
 
 mongoConnect(() => {

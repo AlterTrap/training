@@ -1,0 +1,37 @@
+.pagination {
+    margin: 20px 0;
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+}
+
+.pagination a {
+    transition: all 100ms ease-in-out 0s;
+    background-color: #f7f7f8;
+    border-radius: 5px 5px 5px 5px;
+    color: #69696e;
+    display: inline-block;
+    font: 12px/30px Arial, sans-serif;
+    height: 30px;
+    margin: 0 3px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    width: 30px;
+}
+
+.pagination a.active {
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 5px;
+}
+
+.disabled {
+    background: #ccc;
+}
