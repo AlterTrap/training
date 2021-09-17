@@ -255,7 +255,7 @@ app.get("/", ensureAuthenticated, function (req, res, next) {
     const db = getDb();
     const username = req.session.passport.user;
     const searchName = req.query.searchUser;
-    let perPage = 1;
+    let perPage = 3;
     let page = req.query.page || 1;
     if (searchName == null) {
         db.collection("users")
@@ -312,7 +312,7 @@ app.get("/:page", ensureAuthenticated, function (req, res) {
     const db = getDb();
     const username = req.session.passport.user;
     const searchName = req.query.searchUser;
-    let perPage = 1;
+    let perPage = 3;
     let page = req.params.page || 1;
     db.collection("users")
         .find({})
