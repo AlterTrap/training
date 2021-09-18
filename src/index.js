@@ -60,9 +60,12 @@ passport.deserializeUser(function (username, done) {
     );
 });
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     if (!req.user)
-        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        res.header(
+            "Cache-Control",
+            "private, no-cache, no-store, must-revalidate"
+        );
     next();
 });
 
@@ -134,21 +137,21 @@ app.post("/signup", function (req, res) {
     const checkPasswordCfm = checkLength(passwordCfm);
     const checkUps = oneUpscalePass(password);
 
-    if (!(checkUsername)) {
+    if (!checkUsername) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Username Not enough 6 letters",
         });
     }
 
-    if (!(checkPassword)) {
+    if (!checkPassword) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Passsword Not enough 6 letters",
         });
     }
 
-    if (!(checkPasswordCfm)) {
+    if (!checkPasswordCfm) {
         return res.render("signup", {
             usernameholder: username,
             msg: "Passsword Comfirm Not enough 6 letters",
@@ -204,14 +207,14 @@ app.post("/login", function (req, res, next) {
     const CheckPassword = checkLength(password);
     const checkUps = oneUpscalePass(password);
 
-    if (!(checkUsername)) {
+    if (!checkUsername) {
         return res.render("login", {
             usernameholder: username,
             msg: "Username not enough 6 letters",
         });
     }
 
-    if (!(CheckPassword)) {
+    if (!CheckPassword) {
         return res.render("login", {
             usernameholder: username,
             msg: "Password not enough 6 letters",
@@ -243,14 +246,78 @@ app.post("/login", function (req, res, next) {
     })(req, res, next);
 });
 
-app.get("/", ensureAuthenticated, function (req, res) {
-    const username = req.session.passport.user;
-    res.render("index", { username: username });
-});
-
 app.get("/logout", function (req, res) {
     req.logout();
     res.redirect("/login");
+});
+
+app.get("/", ensureAuthenticated, function (req, res, next) {
+    const db = getDb();
+    const username = req.session.passport.user;
+    const searchName = req.query.searchUser;
+    let perPage = 3;
+    let page = req.query.page || 1;
+    let documentCount = 0;
+
+    if (searchName == null) {
+        db.collection("users")
+            .find({})
+            .count(function (err, count) {
+                if (err) res.render('error', {errmsg : 'Sever error'})
+                documentCount = count;
+            });
+        db.collection("users")
+            .find({})
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .toArray(function (err, userLists) {
+                if (err) res.render('error', {errmsg : 'Sever error'})
+                res.render("index", {
+                    username: username,
+                    userLists: userLists,
+                    searchholder: searchName,
+                    current: page,
+                    pages: Math.ceil(documentCount / perPage),
+                });
+            });
+    } else {
+        if (searchName == ""){
+            searchName == null
+            return res.redirect('/');
+        }
+        db.collection("users")
+            .find(
+                { username: { $regex: searchName, $options: "i" } },
+                { projection: { username: 1, name: 1, birthday: 1 } }
+            )
+            .count(function (err, count) {
+                if (err) res.render('error', {errmsg : 'Sever error'})
+                documentCount = count;
+            });
+        db.collection("users")
+            .find(
+                {
+                    username: {
+                        $regex: searchName,
+                        $options: "i",
+                    },
+                },
+                { projection: { username: 1, name: 1, birthday: 1 } }
+            )
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .toArray(function (err, userLists) {
+                if (err) res.render('error', {errmsg : 'Sever error'})
+                res.render("index", {
+                    username: username,
+                    searchUser: searchName,
+                    userLists: userLists,
+                    searchholder: searchName,
+                    current: page,
+                    pages: Math.ceil(documentCount / perPage),
+                });
+            });
+    }
 });
 
 mongoConnect(() => {
