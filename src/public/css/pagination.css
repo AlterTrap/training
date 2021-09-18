@@ -35,3 +35,16 @@
 .pagination a.disabled {
     background: #ccc;
 }
+
+.wrap {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+form,
+H {
+    width: 400px;
+    margin: auto;
+    height: auto;
+}

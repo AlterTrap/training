@@ -258,37 +258,43 @@ app.get("/", ensureAuthenticated, function (req, res, next) {
     let perPage = 3;
     let page = req.query.page || 1;
     let documentCount = 0;
+
     if (searchName == null) {
         db.collection("users")
-        .find({})
-        .count(function (err, count) {
-            if(err) throw err
-            documentCount = count;
-        });
-        db.collection("users")
-        .find({})
-        .skip(perPage * page - perPage)
-        .limit(perPage)
-        .toArray(function (err, userLists) {
-            if (err) throw err;
-            res.render("index", {
-                username: username,
-                userLists: userLists,
-                current: page,
-                pages: Math.ceil(documentCount / perPage),
+            .find({})
+            .count(function (err, count) {
+                if (err) res.render('error', {errmsg : 'Sever error'})
+                documentCount = count;
             });
-        });
+        db.collection("users")
+            .find({})
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .toArray(function (err, userLists) {
+                if (err) res.render('error', {errmsg : 'Sever error'})
+                res.render("index", {
+                    username: username,
+                    userLists: userLists,
+                    searchholder: searchName,
+                    current: page,
+                    pages: Math.ceil(documentCount / perPage),
+                });
+            });
     } else {
+        if (searchName == ""){
+            searchName == null
+            return res.redirect('/');
+        }
         db.collection("users")
             .find(
                 { username: { $regex: searchName, $options: "i" } },
                 { projection: { username: 1, name: 1, birthday: 1 } }
             )
             .count(function (err, count) {
-               if(err) throw err;
-               documentCount = count;
+                if (err) res.render('error', {errmsg : 'Sever error'})
+                documentCount = count;
             });
-            db.collection("users")
+        db.collection("users")
             .find(
                 {
                     username: {
@@ -301,11 +307,12 @@ app.get("/", ensureAuthenticated, function (req, res, next) {
             .skip(perPage * page - perPage)
             .limit(perPage)
             .toArray(function (err, userLists) {
-                if (err) throw err;
+                if (err) res.render('error', {errmsg : 'Sever error'})
                 res.render("index", {
                     username: username,
                     searchUser: searchName,
                     userLists: userLists,
+                    searchholder: searchName,
                     current: page,
                     pages: Math.ceil(documentCount / perPage),
                 });
