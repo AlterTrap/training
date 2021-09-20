@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const passport = require("passport");
 const getDb = require('../database').getDb;
 
 function ensureAuthenticated(req, res, next) {
