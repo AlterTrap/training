@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const getDb = require('../database').getDb;
+const database = require('../database');
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -11,7 +11,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 router.get("/", ensureAuthenticated, function (req, res) {
-    const db = getDb();
+    const db = database.getDb();
     const username = req.session.passport.user;
     const searchName = req.query.searchUser;
     let perPage = 3;

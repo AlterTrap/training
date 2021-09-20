@@ -16,5 +16,4 @@ const oneUpscalePass = (val) => {
     }
 }
 
-exports.checkLength = checkLength;
-exports.oneUpscalePass = oneUpscalePass;
+module.exports = {oneUpscalePass ,checkLength};

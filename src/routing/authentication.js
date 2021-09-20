@@ -148,5 +148,4 @@ router.get("/logout", function (req, res) {
     res.redirect("/login");
 });
 
-module.exports = passport;
 module.exports = router;
