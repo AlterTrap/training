@@ -1,14 +1,13 @@
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
-const passport = require("passport");
 
 const app = express();
 const port = 3000;
 const mongoConnect = require("../src/database").mongoConnect;// Just attach the function name to the variable
 const index = require("./routing/index");
 const authentication = require("./routing/authentication");
-require("../src/passportconfig");
+const passport = require("../src/passportconfig");
 
 app.use(function (req, res, next) {
     if (!req.user)
