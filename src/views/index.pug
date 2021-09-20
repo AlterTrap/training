@@ -20,64 +20,67 @@ html(lang="en")
                 button(type="submit") submit 
             
             // Tabble
-            H User Lists
-                table(width='100%', cellspacing='1', cellpadding='1', border='1', bgcolor='#F2F2F2')
-                    thead
-                        tr
-                            th Username
-                            th Name
-                            th Birth Day
-                    tbody
-                    if userLists
-                    each accounts in userLists
-                        tr
-                            td #{accounts.username}
-                            td #{accounts.name}
-                            td #{accounts.birthday}   
-                div.pagination
-                    ul
-                        // First Button
-                        if current == 1
-                            a.disabled First
-                        else 
-                            if searchUser == null
-                                a(href='/?page=' + 1) First
-                            else
-                                a(href='/?searchUser='+ `${searchUser}` + '&page=' + 1 ) First
-                        
-                        // Prievious Button
-                        if current > 1
-                            if searchUser == null
-                                a(href='/?page=' +`${parseInt(current) - 1}`) Previous
+            if userLists.length
+                H User Lists
+                    table(width='100%', cellspacing='1', cellpadding='1', border='1', bgcolor='#F2F2F2')
+                        thead
+                            tr
+                                th Username
+                                th Name
+                                th Birth Day
+                        tbody
+                        each accounts in userLists
+                            tr
+                                td #{accounts.username}
+                                td #{accounts.name}
+                                td #{accounts.birthday}   
+                    div.pagination
+                        ul
+                            // First Button
+                            if current == 1
+                                a.disabled First
                             else 
-                                a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) - 1}`) Previous
+                                if searchUser == null
+                                    a(href='/?page=' + 1) First
+                                else
+                                    a(href='/?searchUser='+ `${searchUser}` + '&page=' + 1 ) First
                         
-                        // Number Button
-                        - var i = 1
-                        while i <= pages 
-                            if searchUser == null
-                                if current == i 
-                                    a.active= i++
+                            // Prievious Button
+                            if current > 1
+                                if searchUser == null
+                                    a(href='/?page=' +`${parseInt(current) - 1}`) Previous
                                 else 
-                                    a(href='/?page='+`${i}`)= i++
-                            else 
-                                if current == i 
-                                    a.active= i++ 
+                                    a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) - 1}`) Previous
+                        
+                            // Number Button
+                            - var i = 1
+                            while i <= pages 
+                                if searchUser == null
+                                    if current == i 
+                                        a.active= i++
+                                    else 
+                                        a(href='/?page='+`${i}`)= i++
                                 else 
-                                    a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++
+                                    if current == i 
+                                        a.active= i++ 
+                                    else 
+                                        a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${i}`)= i++
                         
-                        // Next Button
-                        if current < pages
-                            if searchUser == null
-                                a(href='/?page=' +`${parseInt(current) + 1}`) Next
-                            else 
-                                a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) + 1}`) Next
+                            // Next Button
+                            if current < pages
+                                if searchUser == null
+                                    a(href='/?page=' +`${parseInt(current) + 1}`) Next
+                                else 
+                                    a(href='/?searchUser='+ `${searchUser}` + '&page=' +`${parseInt(current) + 1}`) Next
                         
-                        // Last button
-                        if current == pages 
-                            a.disabled Last
-                        else 
-                            if searchUser == null
-                                a(href='/?page=' + `${pages}`) Last
+                            // Last button
+                            if current == pages 
+                                a.disabled Last
                             else 
-                                a(href='/?searchUser='+ `${searchUser}` + '&page=' + `${pages}` ) Last
+                                if searchUser == null
+                                    a(href='/?page=' + `${pages}`) Last
+                                else 
+                                    a(href='/?searchUser='+ `${searchUser}` + '&page=' + `${pages}` ) Last
+            else
+                a No list user found
+                
