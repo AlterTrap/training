@@ -67,6 +67,7 @@ router.get("/", ensureAuthenticated, function (req, res) {
             .limit(perPage)
             .toArray(function (err, userLists) {
                 if (err) res.render('error', {errmsg : 'Sever error'})
+                console.log(userLists)
                 res.render("index", {
                     username: username,
                     searchUser: searchName,
