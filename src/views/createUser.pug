@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Sign up
+        link(rel="stylesheet", href="/css/styles.css")
+    body 
+    div.wrap
+        form(action="/user/create", method="post") 
+            h2 Create User
+            div.container
+                div(style="color: red")= msg
+                label(for="name") Name 
+                input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
+                label(for="bday") Birthday 
+                input#bday(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
+                label(for="uname") Username 
+                input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder)
+                label(for="psw") Password
+                input#password(type="password", name="password", placeholder="Enter Password") 
+                button(type="submit") submit 
+
+

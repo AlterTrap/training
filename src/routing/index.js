@@ -10,6 +10,16 @@ function ensureAuthenticated(req, res, next) {
     res.redirect("/login");
 }
 
+function prettyDate(dateString){
+    var date = new Date();
+    var d = date.getDate(dateString);
+    var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+    var m = monthNames[date.getMonth()];
+    var y = date.getFullYear();
+    
+    return d+'/'+m+'/'+y;
+} 
+
 router.get("/", ensureAuthenticated, function (req, res) {
     const db = database.getDb();
     const username = req.session.passport.user;
@@ -37,6 +47,7 @@ router.get("/", ensureAuthenticated, function (req, res) {
                     searchholder: searchName,
                     current: page,
                     pages: Math.ceil(documentCount / perPage),
+                    moment: require('moment')
                 });
             });
     } else {

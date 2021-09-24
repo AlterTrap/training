@@ -6,6 +6,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Hello there
         link(rel="stylesheet", href="/css/pagination.css")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
     body 
         div.wrap
             form(action="/logout", method="get") 
@@ -17,8 +18,8 @@ html(lang="en")
                 br
                 input#searchUser(type="searchUser", name="searchUser", value=searchholder)
                 br
-                button(type="submit") submit 
-            
+                button(type="submit") submit
+                a.btn(href='/user/create') Add user
             // Tabble
             if userLists.length
                 H User Lists
@@ -28,12 +29,19 @@ html(lang="en")
                                 th Username
                                 th Name
                                 th Birth Day
+                                th 
                         tbody
                         each accounts in userLists
                             tr
                                 td #{accounts.username}
                                 td #{accounts.name}
-                                td #{accounts.birthday}   
+                                if accounts.birthday != null
+                                    td= moment(accounts.birthday).format('DD/MM/YYYY')
+                                else
+                                    td #{accounts.birthday}
+                                td 
+                                    a.btn(class='fa fa-trash' href="/user/" + `${accounts.username}` + "/delete", onClick="return confirm('Are you sure to delete?')" )
+                                    a.btn(class='fa fa-pencil' href="/user/" + `${accounts.username}` + "/edit")
                     div.pagination
                         ul
                             // First Button
@@ -83,4 +91,3 @@ html(lang="en")
                                     a(href='/?searchUser='+ `${searchUser}` + '&page=' + `${pages}` ) Last
             else
                 a No list user found
-                

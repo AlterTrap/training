@@ -1,0 +1,19 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Sign up
+        link(rel="stylesheet", href="/css/styles.css")
+    body 
+    div.wrap
+        form(action="/user/" + `${username}` + "/edit", method="post") 
+            h2 Edit user
+            div.container
+                div(style="color: red")= msg
+                label(for="name") Name 
+                input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
+                label(for="bday") Birthday 
+                input#bDay(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
+                button(type="submit", onClick="return confirm('Are you sure to save your profile?')") submit 
