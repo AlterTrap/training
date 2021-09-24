@@ -16,4 +16,12 @@ const oneUpscalePass = (val) => {
     }
 }
 
-module.exports = {oneUpscalePass ,checkLength};
+const checkNull = (val) => {
+    if(val.length == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+module.exports = {oneUpscalePass ,checkLength, checkNull};

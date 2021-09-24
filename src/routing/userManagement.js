@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 
 const checkLength = require("../validate").checkLength;
 const oneUpscalePass = require("../validate").oneUpscalePass;
+const checkNull = require("../validate").checkNull;
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -27,10 +28,27 @@ router.post("/create", function (req, res) {
     const checkUsername = checkLength(username);
     const checkPassword = checkLength(password);
     const checkUps = oneUpscalePass(password);
+    const nameNull = checkNull(name);
+    const usernameNull = checkNull(username);
+    const bDayull = checkNull(bDay);
+    const passwordNull = checkNull(password)
+    console.log(nameNull)
+
+    if (nameNull || usernameNull || bDayull || passwordNull){
+        return res.render("createUser", {
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: bDay,
+            msg: "Please fill all information",
+        });
+    }
+
 
     if (!checkUsername) {
         return res.render("createUser", {
             usernameholder: username,
+            nameholder: name,
+            bdayholder: bDay,
             msg: "Username Not enough 6 letters",
         });
     }
@@ -39,6 +57,7 @@ router.post("/create", function (req, res) {
         return res.render("createUser", {
             usernameholder: username,
             nameholder: name,
+            bdayholder: bDay,
             msg: "Passsword Not enough 6 letters",
         });
     }
@@ -47,6 +66,7 @@ router.post("/create", function (req, res) {
         return res.render("createUser", {
             usernameholder: username,
             nameholder: name,
+            bdayholder: bDay,
             msg: "Password require 1 upscale letter",
         });
     }
@@ -62,6 +82,7 @@ router.post("/create", function (req, res) {
                 return res.render("createUser", {
                     usernameholder: username,
                     nameholder: name,
+                    bdayholder: bDay,
                     msg: "Username already exist",
                 });
             }
@@ -102,6 +123,16 @@ router.post("/:username/edit", function (req, res) {
     const name = req.body.name;
     const bDay = req.body.birthday;
     const username = req.params.username;
+    const nameNull = checkNull(name);
+    const bDayull = checkNull(bDay);
+
+    if (nameNull || bDayull){
+        return res.render("editUser", {
+            nameholder: name,
+            bdayholder: bDay,
+            msg: "Please fill all information",
+        });
+    }
 
     db.collection("users")
         .findOneAndUpdate(

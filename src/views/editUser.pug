@@ -13,7 +13,7 @@ html(lang="en")
             div.container
                 div(style="color: red")= msg
                 label(for="name") Name 
-                input#name(type="text", name="name", placeholder="Enter Username", value=nameholder, required)
+                input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
                 label(for="bday") Birthday 
-                input#bDay(type="date", name="birthday", placeholder="Enter Username", value=bdayholder, required)
+                input#bDay(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
                 button(type="submit", onClick="return confirm('Are you sure to save your profile?')") submit 
