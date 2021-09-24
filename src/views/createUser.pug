@@ -13,11 +13,11 @@ html(lang="en")
             div.container
                 div(style="color: red")= msg
                 label(for="name") Name 
-                input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
+                input#name(type="text", name="name", placeholder="Enter Username", value=nameholder, required)
                 label(for="bday") Birthday 
-                input#bday(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
+                input#bday(type="date", name="birthday", placeholder="Enter Username", value=bdayholder, required)
                 label(for="uname") Username 
-                input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder)
+                input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder, required)
                 label(for="psw") Password
                 input#password(type="password", name="password", placeholder="Enter Password") 
                 button(type="submit") submit 
