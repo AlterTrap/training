@@ -61,11 +61,19 @@ H {
 }
 
 .butn {
-    display: inline-block;
-    background-color: DodgerBlue;
-    border: none;
-    color: white;
-    padding: auto;
-    font-size: 16px;
+    background-color: #44c767;
+    border-radius: 28px;
+    border: 1px solid #18ab29;
     cursor: pointer;
+    color: #ffffff;
+    padding: 5px 10px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #2f6627;
+    float: right;
+}
+
+.delete {
+    width: 75px;
+    margin: auto;
+    height: auto;
 }

@@ -17,11 +17,18 @@ const oneUpscalePass = (val) => {
 }
 
 const checkNull = (val) => {
-    if(val.length == 0){
+    return val.length === 0;
+}
+
+const validDay = (val) => {
+    var now = new Date();
+    var bdInput = new Date(val)
+    console.log(now.getFullYear());
+    if(bdInput.getFullYear() > now.getFullYear()) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-module.exports = {oneUpscalePass ,checkLength, checkNull};
+module.exports = {oneUpscalePass ,checkLength, checkNull, validDay};

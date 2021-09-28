@@ -39,9 +39,10 @@ html(lang="en")
                                     td= moment(accounts.birthday).format('DD/MM/YYYY')
                                 else
                                     td #{accounts.birthday}
-                                td 
-                                    a.btn(class='fa fa-trash' href="/user/" + `${accounts.username}` + "/delete", onClick="return confirm('Are you sure to delete?')" )
-                                    a.btn(class='fa fa-pencil' href="/user/" + `${accounts.username}` + "/edit")
+                                td
+                                    form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
+                                        button(type='button' class='fa fa-trash' href="/user/delete/" + `${accounts.username}` onClick="return confirm('Are you sure to delete?')").butn
+                                    a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
                     div.pagination
                         ul
                             // First Button

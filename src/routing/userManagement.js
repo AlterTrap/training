@@ -6,14 +6,8 @@ const bcrypt = require("bcrypt");
 const checkLength = require("../validate").checkLength;
 const oneUpscalePass = require("../validate").oneUpscalePass;
 const checkNull = require("../validate").checkNull;
-
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    req.session.error = "Login to view this page";
-    res.redirect("/login");
-}
+const validDay = require("../validate").validDay;
+const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/create", ensureAuthenticated, (req, res) => {
     res.render("createUser");
@@ -21,52 +15,92 @@ router.get("/create", ensureAuthenticated, (req, res) => {
 
 router.post("/create", function (req, res) {
     const db = database.getDb();
-    const name = req.body.name;
-    const bDay = req.body.birthday;
-    const username = req.body.username;
-    const password = req.body.password;
+    const { name, birthday, username, password } = req.body
     const checkUsername = checkLength(username);
     const checkPassword = checkLength(password);
     const checkUps = oneUpscalePass(password);
     const nameNull = checkNull(name);
     const usernameNull = checkNull(username);
-    const bDayull = checkNull(bDay);
+    const bDayull = checkNull(birthday);
     const passwordNull = checkNull(password)
-    console.log(nameNull)
+    const inFuture = validDay(birthday);
 
-    if (nameNull || usernameNull || bDayull || passwordNull){
+    if (nameNull){
         return res.render("createUser", {
+            username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: bDay,
-            msg: "Please fill all information",
+            bdayholder: birthday,
+            msg: "Please fill all information"
         });
     }
 
+    if (usernameNull){
+        return res.render("createUser", {
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "Please fill username field"
+        });
+    }
+
+    if (bDayull){
+        return res.render("createUser", {
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "Please choose birthday"
+        });
+    }
+
+    if (inFuture) {
+        return res.render("createUser", {
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "The birhday can not be in future"
+        });
+    }
+
+    if (passwordNull){
+        return res.render("createUser", {
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "Please fill password field"
+        });
+    }
 
     if (!checkUsername) {
         return res.render("createUser", {
+            username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: bDay,
+            bdayholder: birthday,
             msg: "Username Not enough 6 letters",
         });
     }
 
     if (!checkPassword) {
         return res.render("createUser", {
+            username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: bDay,
+            bdayholder: birthday,
             msg: "Passsword Not enough 6 letters",
         });
     }
 
     if (checkUps) {
         return res.render("createUser", {
+            username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: bDay,
+            bdayholder: birthday,
             msg: "Password require 1 upscale letter",
         });
     }
@@ -80,9 +114,10 @@ router.post("/create", function (req, res) {
                 return bcrypt.genSalt(10);
             } else {
                 return res.render("createUser", {
+                    username: username,
                     usernameholder: username,
                     nameholder: name,
-                    bdayholder: bDay,
+                    bdayholder: birthday,
                     msg: "Username already exist",
                 });
             }
@@ -94,7 +129,7 @@ router.post("/create", function (req, res) {
         .then((hash) => {
             let cusAcc = {
                 name: name,
-                birthday: bDay,
+                birthday: birthday,
                 username: username,
                 password: hash,
             };
@@ -104,13 +139,14 @@ router.post("/create", function (req, res) {
         });
 });
 
-router.get("/:username/edit", ensureAuthenticated, (req, res) => {
+router.get("/edit/:username", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const username = req.params.username;
     db.collection("users")
         .findOne({ username })
         .then((user) => {
             res.render("editUser", {
+                username: username,
                 nameholder: user.name,
                 bdayholder: user.birthday,
                 username: user.username,
@@ -118,35 +154,55 @@ router.get("/:username/edit", ensureAuthenticated, (req, res) => {
         });
 });
 
-router.post("/:username/edit", function (req, res) {
+router.post("/edit/:username", function (req, res) {
     const db = database.getDb();
-    const name = req.body.name;
-    const bDay = req.body.birthday;
+    const {name, birthday} = req.body;
     const username = req.params.username;
     const nameNull = checkNull(name);
-    const bDayull = checkNull(bDay);
+    const bDayull = checkNull(birthday);
+    const inFuture = validDay(birthday);
 
-    if (nameNull || bDayull){
+    if (nameNull){
         return res.render("editUser", {
+            username: username,
             nameholder: name,
-            bdayholder: bDay,
-            msg: "Please fill all information",
+            bdayholder: birthday,
+            msg: "Please fill name field"
+        });
+    }
+
+    if (bDayull){
+        return res.render("editUser", {
+            username: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "Please choose birthday"
+        });
+    }
+
+
+    if (inFuture) {
+        return res.render("editUser", {
+            username: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "The birhday can not be in future"
         });
     }
 
     db.collection("users")
         .findOneAndUpdate(
             { username: username },
-            { $set: { name: name, birthday: bDay } }
+            { $set: { name: name, birthday: birthday } }
         )
         .then(res.redirect("/"));
 });
 
-router.get("/:username/delete", ensureAuthenticated, (req, res) => {
+router.get("/delete/:username", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const username = req.params.username;
-    db.collection("users").deleteOne({ username: username });
-    res.redirect("/");
+    db.collection("users").deleteOne({ username: username })
+    .then(res.redirect("/"));
 });
 
 module.exports = router;
