@@ -41,7 +41,7 @@ html(lang="en")
                                     td #{accounts.birthday}
                                 td
                                     form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
-                                        button(type='button' class='fa fa-trash' href="/user/delete/" + `${accounts.username}` onClick="return confirm('Are you sure to delete?')").butn
+                                        button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn
                                     a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
                     div.pagination
                         ul

@@ -198,7 +198,7 @@ router.post("/edit/:username", function (req, res) {
         .then(res.redirect("/"));
 });
 
-router.get("/delete/:username", ensureAuthenticated, (req, res) => {
+router.post("/delete/:username", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const username = req.params.username;
     db.collection("users").deleteOne({ username: username })
