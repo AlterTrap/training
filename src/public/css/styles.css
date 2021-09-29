@@ -29,6 +29,14 @@ input[type="date"] {
     box-sizing: border-box;
 }
 
+e-datepicker {
+    width: 100%;
+    /* padding: 12px 20px; */
+    margin: 8px 0;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
 button {
     background-color: #04aa6d;
     color: white;

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const database = require("../database");
 const bcrypt = require("bcrypt");
+const moment = require("moment");
 
 const checkLength = require("../validate").checkLength;
 const oneUpscalePass = require("../validate").oneUpscalePass;
@@ -150,6 +151,7 @@ router.get("/edit/:username", ensureAuthenticated, (req, res) => {
                 nameholder: user.name,
                 bdayholder: user.birthday,
                 username: user.username,
+                moment: moment
             });
         });
 });
@@ -198,7 +200,7 @@ router.post("/edit/:username", function (req, res) {
         .then(res.redirect("/"));
 });
 
-router.post("/delete/:username", ensureAuthenticated, (req, res) => {
+router.get("/delete/:username", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const username = req.params.username;
     db.collection("users").deleteOne({ username: username })

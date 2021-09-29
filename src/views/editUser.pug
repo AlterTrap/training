@@ -1,4 +1,5 @@
 doctype html
+meta(content="text/html;charset=utf-8",http-equiv="Content-Type")
 html(lang="en")
     head
         meta(charset="UTF-8")
@@ -6,6 +7,8 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Edit User
         link(rel="stylesheet", href="/css/styles.css")
+        link(rel="stylesheet", href="https://redirector.eservice.emarsys.net/ui/latest/css/app.css")
+        script(src="https://redirector.eservice.emarsys.net/ui/latest/js/app.js") 
     body 
     div.wrap
         form(action="/user/edit/" + `${username}`, method="post") 
@@ -15,5 +18,6 @@ html(lang="en")
                 label(for="name") Name 
                 input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
                 label(for="bday") Birthday 
-                input#bDay(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
+                //- input#bDay(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
+                e-datepicker(no-clear,name="birthday", placeholder="Enter Username", value=moment(bdayholder).format("DD/MM/YYYY"))
                 button(type="submit", onClick="return confirm('Are you sure to save your profile?')") submit 
