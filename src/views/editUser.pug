@@ -1,5 +1,4 @@
 doctype html
-meta(content="text/html;charset=utf-8",http-equiv="Content-Type")
 html(lang="en")
     head
         meta(charset="UTF-8")
@@ -7,8 +6,11 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Edit User
         link(rel="stylesheet", href="/css/styles.css")
-        link(rel="stylesheet", href="https://redirector.eservice.emarsys.net/ui/latest/css/app.css")
-        script(src="https://redirector.eservice.emarsys.net/ui/latest/js/app.js") 
+        link(rel="stylesheet", href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+        link(rel="stylesheet", href="/resources/demos/style.css")
+        script(src="https://code.jquery.com/jquery-1.12.4.js") 
+        script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js") 
+        script(src="/Jquery/date.js")
     body 
     div.wrap
         form(action="/user/edit/" + `${username}`, method="post") 
@@ -17,7 +19,6 @@ html(lang="en")
                 div(style="color: red")= msg
                 label(for="name") Name 
                 input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
-                label(for="bday") Birthday 
-                //- input#bDay(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
-                e-datepicker(no-clear,name="birthday", placeholder="Enter Username", value=moment(bdayholder).format("DD/MM/YYYY"))
+                label(for="bDay") Birthday 
+                input#bDay(type="text", name="birthday", value=bdayholder)
                 button(type="submit", onClick="return confirm('Are you sure to save your profile?')") submit 

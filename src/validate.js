@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 const checkLength = (val) => {
     // Check length in Username, Password and Password Comfirm
     if (val.length >= 6) {
@@ -23,7 +25,6 @@ const checkNull = (val) => {
 const validDay = (val) => {
     var now = new Date();
     var bdInput = new Date(val)
-    console.log(now.getFullYear());
     if(bdInput.getFullYear() > now.getFullYear()) {
         return true;
     } else {

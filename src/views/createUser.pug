@@ -6,6 +6,11 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Create User
         link(rel="stylesheet", href="/css/styles.css")
+        link(rel="stylesheet", href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+        link(rel="stylesheet", href="/resources/demos/style.css")
+        script(src="https://code.jquery.com/jquery-1.12.4.js") 
+        script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js") 
+        script(src="/Jquery/date.js")
     body 
     div.wrap
         form(action="/user/create", method="post") 
@@ -15,7 +20,7 @@ html(lang="en")
                 label(for="name") Name 
                 input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
                 label(for="bday") Birthday 
-                input#bday(type="date", name="birthday", placeholder="Enter Username", value=bdayholder)
+                input#bDay(type="text", name="birthday", placeholder="Enter Username", value=bdayholder)
                 label(for="uname") Username 
                 input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder)
                 label(for="psw") Password
