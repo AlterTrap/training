@@ -43,6 +43,7 @@ html(lang="en")
                                     form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
                                         button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn
                                     a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
+                if pages != 1
                     div.pagination
                         ul
                             // First Button

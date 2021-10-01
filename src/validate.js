@@ -25,7 +25,7 @@ const checkNull = (val) => {
 const validDay = (val) => {
     var now = new Date();
     var bdInput = new Date(val)
-    if(bdInput.getFullYear() > now.getFullYear()) {
+    if(bdInput > now ) {
         return true;
     } else {
         return false;

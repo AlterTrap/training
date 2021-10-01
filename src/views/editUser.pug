@@ -20,5 +20,8 @@ html(lang="en")
                 label(for="name") Name 
                 input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
                 label(for="bDay") Birthday 
-                input#bDay(type="text", name="birthday", value=moment(bdayholder).format("DD/MM/YYYY"))
+                if bdayholder.length
+                    input#bDay(type="text", name="birthday", value=moment(bdayholder).format("DD/MM/YYYY"))
+                else 
+                    input#bDay(type="text", name="birthday", value=bdayholder)
                 button(type="submit", onClick="return confirm('Are you sure to save your profile?')") submit 

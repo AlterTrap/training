@@ -32,8 +32,8 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
-            msg: "Please fill all information"
+            bdayholder: birthday,
+            msg: "Please fill name field"
         });
     }
 
@@ -42,7 +42,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "Please fill username field"
         });
     }
@@ -52,7 +52,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "Please choose birthday"
         });
     }
@@ -62,7 +62,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "The birhday can not be in future"
         });
     }
@@ -72,7 +72,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "Please fill password field"
         });
     }
@@ -82,7 +82,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "Username Not enough 6 letters",
         });
     }
@@ -92,7 +92,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "Passsword Not enough 6 letters",
         });
     }
@@ -102,7 +102,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "Password require 1 upscale letter",
         });
     }
@@ -150,7 +150,7 @@ router.get("/edit/:username", ensureAuthenticated, (req, res) => {
             res.render("editUser", {
                 username: username,
                 nameholder: user.name,
-                bdayholder: user.birthday,
+                bdayholder: user.birthday || "",
                 username: user.username,
                 moment: moment
             });
@@ -170,8 +170,9 @@ router.post("/edit/:username", function (req, res) {
         return res.render("editUser", {
             username: username,
             nameholder: name,
-            bdayholder: convertBday,
-            msg: "Please fill name field"
+            bdayholder: convertBday ,
+            msg: "Please fill name field",
+            moment: moment
         });
     }
 
@@ -179,8 +180,9 @@ router.post("/edit/:username", function (req, res) {
         return res.render("editUser", {
             username: username,
             nameholder: name,
-            bdayholder: convertBday,
-            msg: "Please choose birthday"
+            bdayholder: birthday,
+            msg: "Please choose birthday",
+            moment: moment
         });
     }
 
@@ -190,7 +192,8 @@ router.post("/edit/:username", function (req, res) {
             username: username,
             nameholder: name,
             bdayholder: convertBday,
-            msg: "The birhday can not be in future"
+            msg: "The birhday can not be in future",
+            moment: moment
         });
     }
 
@@ -202,7 +205,7 @@ router.post("/edit/:username", function (req, res) {
         .then(res.redirect("/"));
 });
 
-router.get("/delete/:username", ensureAuthenticated, (req, res) => {
+router.post("/delete/:username", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const username = req.params.username;
     db.collection("users").deleteOne({ username: username })
