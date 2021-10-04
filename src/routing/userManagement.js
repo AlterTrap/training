@@ -7,7 +7,8 @@ const moment = require("moment");
 const checkLength = require("../validate").checkLength;
 const oneUpscalePass = require("../validate").oneUpscalePass;
 const checkNull = require("../validate").checkNull;
-const validDay = require("../validate").validDay;
+const futureDay = require("../validate").futureDay;
+const isNotDate = require("../validate").isNotDate;
 const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/create", ensureAuthenticated, (req, res) => {
@@ -17,7 +18,6 @@ router.get("/create", ensureAuthenticated, (req, res) => {
 router.post("/create", function (req, res) {
     const db = database.getDb();
     const { name, birthday, username, password } = req.body
-    const convertBday = moment(birthday, 'DD/MM/YYYY').format("YYYY-MM-DD");
     const checkUsername = checkLength(username);
     const checkPassword = checkLength(password);
     const checkUps = oneUpscalePass(password);
@@ -25,7 +25,8 @@ router.post("/create", function (req, res) {
     const usernameNull = checkNull(username);
     const bDayull = checkNull(birthday);
     const passwordNull = checkNull(password)
-    const inFuture = validDay(convertBday);
+    const isDate = isNotDate(birthday);
+    const inFuture = futureDay(birthday);
 
     if (nameNull){
         return res.render("createUser", {
@@ -54,6 +55,15 @@ router.post("/create", function (req, res) {
             nameholder: name,
             bdayholder: birthday,
             msg: "Please choose birthday"
+        });
+    }
+
+    if (!(isDate)) {
+        return res.render("createUser", {
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            msg: "Please input correct date with format DD/MM/YYYY",
         });
     }
 
@@ -131,7 +141,7 @@ router.post("/create", function (req, res) {
         .then((hash) => {
             let cusAcc = {
                 name: name,
-                birthday: convertBday,
+                birthday: birthday,
                 username: username,
                 password: hash,
             };
@@ -160,17 +170,17 @@ router.get("/edit/:username", ensureAuthenticated, (req, res) => {
 router.post("/edit/:username", function (req, res) {
     const db = database.getDb();
     const {name, birthday} = req.body;
-    const convertBday = moment(birthday, 'DD/MM/YYYY').format("YYYY-MM-DD");
     const username = req.params.username;
     const nameNull = checkNull(name);
     const bDayull = checkNull(birthday);
-    const inFuture = validDay(convertBday);
+    const isDate = isNotDate(birthday);
+    const inFuture = futureDay(birthday);
 
     if (nameNull){
         return res.render("editUser", {
             username: username,
             nameholder: name,
-            bdayholder: convertBday ,
+            bdayholder: birthday ,
             msg: "Please fill name field",
             moment: moment
         });
@@ -186,12 +196,20 @@ router.post("/edit/:username", function (req, res) {
         });
     }
 
+    if (!(isDate)) {
+        return res.render("editUser", {
+            username: username,
+            nameholder: name,
+            msg: "Please input correct date with format DD/MM/YYYY",
+            moment: moment
+        });
+    }
 
     if (inFuture) {
         return res.render("editUser", {
             username: username,
             nameholder: name,
-            bdayholder: convertBday,
+            bdayholder: birthday,
             msg: "The birhday can not be in future",
             moment: moment
         });
@@ -200,7 +218,7 @@ router.post("/edit/:username", function (req, res) {
     db.collection("users")
         .findOneAndUpdate(
             { username: username },
-            { $set: { name: name, birthday: convertBday } }
+            { $set: { name: name, birthday: birthday } }
         )
         .then(res.redirect("/"));
 });

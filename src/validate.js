@@ -22,14 +22,20 @@ const checkNull = (val) => {
     return val.length === 0;
 }
 
-const validDay = (val) => {
+const futureDay = (val) => {
     var now = new Date();
-    var bdInput = new Date(val)
-    if(bdInput > now ) {
+    var convert = moment(val, 'DD/MM/YYYY').format("YYYY-MM-DD")
+    var bdInput = new Date(convert)
+
+    if ( bdInput > now ) {
         return true;
     } else {
         return false;
     }
 }
 
-module.exports = {oneUpscalePass ,checkLength, checkNull, validDay};
+const isNotDate = (val) => {
+    return moment(val, "DD/MM/YYYY").isValid()
+}
+
+module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate};

@@ -35,10 +35,7 @@ html(lang="en")
                             tr
                                 td #{accounts.username}
                                 td #{accounts.name}
-                                if accounts.birthday != null
-                                    td= moment(accounts.birthday).format('DD/MM/YYYY')
-                                else
-                                    td #{accounts.birthday}
+                                td #{accounts.birthday}
                                 td
                                     form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
                                         button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn

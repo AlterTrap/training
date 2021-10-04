@@ -13,7 +13,7 @@ router.get("/", ensureAuthenticated, function (req, res) {
     let page = req.query.page || 1;
     let documentCount = 0;
     const date = moment(searchName, "DD/MM/YYYY").format("YYYY-MM-DD");
-
+    
     if (searchName == null) {
         db.collection("users")
             .find({})
