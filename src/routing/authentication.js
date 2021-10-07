@@ -116,10 +116,7 @@ router.post("/signup", function (req, res) {
                 if (!user) {
                     return bcrypt.genSalt(10);
                 } else {
-                    return res.render("signup", {
-                        usernameholder: username,
-                        msg: "Username already exist",
-                    });
+                    throw "Username already exist";
                 }
             })
             .then((salt) => {
@@ -133,7 +130,12 @@ router.post("/signup", function (req, res) {
                 passport.authenticate("local")(req, res, function () {
                     res.redirect("/");
                 });
-            });
+            }).catch(error => {
+                return res.render("signup", {
+                    usernameholder: username,
+                    msg: error,
+                });
+            }) 
     } else {
         return res.render("signup", {
             usernameholder: username,

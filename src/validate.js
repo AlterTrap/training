@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 const checkLength = (val) => {
     // Check length in Username, Password and Password Comfirm
     if (val.length >= 6) {
@@ -16,4 +18,24 @@ const oneUpscalePass = (val) => {
     }
 }
 
-module.exports = {oneUpscalePass ,checkLength};
+const checkNull = (val) => {
+    return val.length === 0;
+}
+
+const futureDay = (val) => {
+    var now = new Date();
+    var convert = moment(val, 'DD/MM/YYYY').format("YYYY-MM-DD")
+    var bdInput = new Date(convert)
+
+    if ( bdInput > now ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const isNotDate = (val) => {
+    return moment(val, "DD/MM/YYYY").isValid()
+}
+
+module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate};
