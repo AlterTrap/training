@@ -40,13 +40,13 @@ passport.serializeUser((user, done) => {
     console.log(
         "Inside serializeUser callback. User id is save to the session file store here"
     );
-    return done(null, user.username);
+    return done(null, {username: user.username, role_flg: user.role_flg});
 });
 
-passport.deserializeUser(function (username, done) {
+passport.deserializeUser(function (user, done) {
     const db = getDb();
     db.collection("users").findOne(
-        { username: username },
+        { username: user.username },
         function (err, user) {
             return done(err, user);
         }

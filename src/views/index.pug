@@ -19,7 +19,8 @@ html(lang="en")
                 input#searchUser(type="searchUser", name="searchUser", value=searchholder)
                 br
                 button(type="submit") submit
-                a.btn(href='/user/create') Add user
+                if role_flg == 1
+                    a.btn(href='/user/create') Add user
             // Tabble
             if userLists.length
                 H User Lists
@@ -29,17 +30,22 @@ html(lang="en")
                                 th Username
                                 th Name
                                 th Birth Day
-                                th 
+                                if role_flg == 1
+                                    th 
                         tbody
                         each accounts in userLists
                             tr
                                 td #{accounts.username}
                                 td #{accounts.name}
                                 td #{accounts.birthday}
-                                td
-                                    form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
-                                        button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn
-                                    a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
+                                if role_flg == 1
+                                    td
+                                        form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
+                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn
+                                        a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
+                                else if username == accounts.username
+                                    td
+                                        a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
                 if pages != 1
                     div.pagination
                         ul

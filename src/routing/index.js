@@ -7,12 +7,12 @@ const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/", ensureAuthenticated, function (req, res) {
     const db = database.getDb();
-    const username = req.session.passport.user;
+    const username = req.session.passport.user.username;
+    const role_flg = req.session.passport.user.role_flg;
     const searchName = req.query.searchUser;
     let perPage = 3;
     let page = req.query.page || 1;
     let documentCount = 0;
-    const date = moment(searchName, "DD/MM/YYYY").format("YYYY-MM-DD");
     
     if (searchName == null) {
         db.collection("users")
@@ -29,11 +29,11 @@ router.get("/", ensureAuthenticated, function (req, res) {
                 if (err) res.render("error", { errmsg: "Sever error" });
                 res.render("index", {
                     username: username,
+                    role_flg: role_flg || 0,
                     userLists: userLists,
                     searchholder: searchName,
                     current: page,
-                    pages: Math.ceil(documentCount / perPage),
-                    moment: moment,
+                    pages: Math.ceil(documentCount / perPage)
                 });
             });
     } else {
@@ -47,7 +47,6 @@ router.get("/", ensureAuthenticated, function (req, res) {
                     $or: [
                         { username: { $regex: searchName, $options: "i" } },
                         { name: { $regex: searchName, $options: "i" } },
-                        { birthday: { $regex: date, $options: "i" } },
                         { birthday: { $regex: searchName, $options: "i" } },
                     ],
                 },
@@ -63,7 +62,6 @@ router.get("/", ensureAuthenticated, function (req, res) {
                     $or: [
                         { username: { $regex: searchName, $options: "i" } },
                         { name: { $regex: searchName, $options: "i" } },
-                        { birthday: { $regex: date, $options: "i" } },
                         { birthday: { $regex: searchName, $options: "i" } },
                     ],
                 },
@@ -75,12 +73,12 @@ router.get("/", ensureAuthenticated, function (req, res) {
                 if (err) res.render("error", { errmsg: "Sever error" });
                 res.render("index", {
                     username: username,
+                    role_flg: role_flg || 0,
                     searchUser: searchName,
                     userLists: userLists,
                     searchholder: searchName,
                     current: page,
-                    pages: Math.ceil(documentCount / perPage),
-                    moment: moment,
+                    pages: Math.ceil(documentCount / perPage)
                 });
             });
     }
