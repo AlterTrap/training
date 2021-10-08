@@ -38,4 +38,12 @@ const isNotDate = (val) => {
     return moment(val, "DD/MM/YYYY").isValid()
 }
 
-module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate};
+const checkRoleVal = (val) => {
+    if(val > 1 || val < 0 ){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate, checkRoleVal};

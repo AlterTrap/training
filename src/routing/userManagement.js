@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const database = require("../database");
 const bcrypt = require("bcrypt");
-const moment = require("moment");
 
 const checkLength = require("../validate").checkLength;
 const oneUpscalePass = require("../validate").oneUpscalePass;
 const checkNull = require("../validate").checkNull;
 const futureDay = require("../validate").futureDay;
 const isNotDate = require("../validate").isNotDate;
+const checkRoleVal = require("../validate").checkRoleVal;
 const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/create", ensureAuthenticated, (req, res) => {
@@ -27,6 +27,7 @@ router.post("/create", function (req, res) {
     const passwordNull = checkNull(password)
     const isDate = isNotDate(birthday);
     const inFuture = futureDay(birthday);
+    const invalidRole = checkRoleVal(role);
 
     if (nameNull){
         return res.render("createUser", {
@@ -126,6 +127,16 @@ router.post("/create", function (req, res) {
         });
     }
 
+    if (invalidRole){
+        return res.render("createUser", {
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "Please choose role member in box dropdown",
+        });
+    }
+
     // Check password and password comfirm
     db.collection("users")
         .findOne({ username })
@@ -167,6 +178,13 @@ router.post("/create", function (req, res) {
 router.get("/edit/:username", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const username = req.params.username;
+    const accRole = req.session.passport.user.role_flg;
+    const loggedUser = req.session.passport.user.username;
+
+    if(accRole != 1 && loggedUser != username){
+        return res.render("error", {errmsg: "This page is not exist"});
+    }
+
     db.collection("users")
         .findOne({ username })
         .then((user) => {
@@ -175,6 +193,7 @@ router.get("/edit/:username", ensureAuthenticated, (req, res) => {
                 nameholder: user.name,
                 bdayholder: user.birthday,
                 username: user.username,
+                role_flg: accRole,
                 role: user.role_flg
             });
         });
@@ -184,10 +203,12 @@ router.post("/edit/:username", function (req, res) {
     const db = database.getDb();
     const {name, birthday, role} = req.body;
     const username = req.params.username;
+    const accRole = req.session.passport.user.role_flg;
     const nameNull = checkNull(name);
     const bDayull = checkNull(birthday);
     const isDate = isNotDate(birthday);
     const inFuture = futureDay(birthday);
+    const invalidRole = checkRoleVal(role);
 
     if (nameNull){
         return res.render("editUser", {
@@ -195,6 +216,7 @@ router.post("/edit/:username", function (req, res) {
             nameholder: name,
             bdayholder: birthday ,
             role: role,
+            role_flg: accRole,
             msg: "Please fill name field",
         });
     }
@@ -205,6 +227,7 @@ router.post("/edit/:username", function (req, res) {
             nameholder: name,
             bdayholder: birthday,
             role: role,
+            role_flg: accRole,
             msg: "Please choose birthday",
         });
     }
@@ -214,6 +237,7 @@ router.post("/edit/:username", function (req, res) {
             username: username,
             nameholder: name,
             role: role,
+            role_flg: accRole,
             msg: "Please input correct date with format DD/MM/YYYY",
         });
     }
@@ -224,7 +248,18 @@ router.post("/edit/:username", function (req, res) {
             nameholder: name,
             bdayholder: birthday,
             role: role,
+            role_flg: accRole,
             msg: "The birhday can not be in future",
+        });
+    }
+
+    if (invalidRole){
+        return res.render("editUser", {
+            username: username,
+            nameholder: name,
+            bdayholder: birthday ,
+            role_flg: accRole,
+            msg: "Please choose role member in box dropdown",
         });
     }
 

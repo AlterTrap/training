@@ -124,7 +124,8 @@ router.post("/signup", function (req, res) {
                 return bcrypt.hash(password, salt);
             })
             .then((hash) => {
-                let cusAcc = { username: username, password: hash, role_flg: 0 };
+                const memberRole = 0;
+                let cusAcc = { username: username, password: hash, role_flg: memberRole };
                 // Save user info to DB
                 db.collection("users").insertOne(cusAcc);
                 passport.authenticate("local")(req, res, function () {

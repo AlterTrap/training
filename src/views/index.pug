@@ -13,6 +13,9 @@ html(lang="en")
                 a Hello #{username}
                 br
                 button(type="submit" href='/logout') Logout 
+                br
+                a(href="/status")
+                    button(type="button") Status page
             form(action="/", method="get") 
                 label(for="searchUser") Search Users
                 br
@@ -30,8 +33,7 @@ html(lang="en")
                                 th Username
                                 th Name
                                 th Birth Day
-                                if role_flg == 1
-                                    th 
+                                th 
                         tbody
                         each accounts in userLists
                             tr
@@ -46,6 +48,8 @@ html(lang="en")
                                 else if username == accounts.username
                                     td
                                         a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
+                                else 
+                                    td
                 if pages != 1
                     div.pagination
                         ul
