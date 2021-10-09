@@ -9,6 +9,7 @@ const index = require("./routing/index");
 const authentication = require("./routing/authentication");
 const passport = require("../src/passportconfig");
 const userManagement = require("./routing/userManagement");
+const statusManagement = require("./routing/statusManagement")
 
 app.use(function (req, res, next) {
     if (!req.user)
@@ -38,6 +39,8 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use("/", authentication);
 
 app.use("/", index);
+
+app.use("/", statusManagement)
 
 app.use("/user", userManagement);
 

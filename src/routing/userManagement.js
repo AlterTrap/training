@@ -9,8 +9,7 @@ const checkNull = require("../validate").checkNull;
 const futureDay = require("../validate").futureDay;
 const isNotDate = require("../validate").isNotDate;
 const checkRoleVal = require("../validate").checkRoleVal;
-const requireRole = require("../validate").requireRole;
-const adminRole = require("../constant").adminRole;
+const required = require("../validate").required;
 const constant = require("../constant")
 const ensureAuthenticated = require("../ensureAuthenticated");
 
@@ -31,7 +30,7 @@ router.post("/create", function (req, res) {
     const isDate = isNotDate(birthday);
     const inFuture = futureDay(birthday);
     const invalidRole = checkRoleVal(role);
-    const isRequireRole = requireRole(role);
+    const isRequireRole = required(role);
 
     if (nameNull){
         return res.render("createUser", {
@@ -131,7 +130,7 @@ router.post("/create", function (req, res) {
         });
     }
 
-    if (invalidRole || isRequireRole){
+    if (invalidRole || !(isRequireRole)){
         return res.render("createUser", {
             username: username,
             usernameholder: username,
@@ -185,7 +184,7 @@ router.get("/edit/:username", ensureAuthenticated, (req, res) => {
     const accRole = req.session.passport.user.role_flg;
     const loggedUser = req.session.passport.user.username;
 
-    if(accRole != adminRole && loggedUser != username){
+    if(accRole != constant.adminRole && loggedUser != username){
         return res.render("error", {errmsg: "This page is not exist"});
     }
 
@@ -214,7 +213,7 @@ router.post("/edit/:username", function (req, res) {
     const isDate = isNotDate(birthday);
     const inFuture = futureDay(birthday);
     const invalidRole = checkRoleVal(role);
-    const isRequireRole = requireRole(role);
+    const isRequireRole = required(role);
 
     if (nameNull){
         return res.render("editUser", {
@@ -263,7 +262,7 @@ router.post("/edit/:username", function (req, res) {
         });
     }
 
-    if (invalidRole || isRequireRole) {
+    if (invalidRole || !(isRequireRole)) {
         return res.render("editUser", {
             username: username,
             nameholder: name,

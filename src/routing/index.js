@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const database = require("../database");
 
-const memberRole = require("../constant").memberRole;
 const constant = require("../constant")
 const ensureAuthenticated = require("../ensureAuthenticated");
 
@@ -30,7 +29,7 @@ router.get("/", ensureAuthenticated, function (req, res) {
                 if (err) res.render("error", { errmsg: "Sever error" });
                 res.render("index", {
                     username: username,
-                    role_flg: role_flg || memberRole,
+                    role_flg: role_flg || constant.memberRole,
                     userLists: userLists,
                     searchholder: searchName,
                     current: page,
@@ -75,7 +74,7 @@ router.get("/", ensureAuthenticated, function (req, res) {
                 if (err) res.render("error", { errmsg: "Sever error" });
                 res.render("index", {
                     username: username,
-                    role_flg: role_flg || memberRole,
+                    role_flg: role_flg || constant.memberRole,
                     searchUser: searchName,
                     userLists: userLists,
                     searchholder: searchName,

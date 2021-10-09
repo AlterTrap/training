@@ -1,0 +1,75 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Status
+        link(rel="stylesheet", href="/css/pagination.css")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+    body 
+    div.wrap
+        a.button(href="/status/create")
+            button(type="button") Post some status
+        a.button(href="/")
+            button(type="button") back
+        if statusLists.length
+            H All status
+                    table(width='100%', cellspacing='1', cellpadding='1', border='1', bgcolor='#F2F2F2')
+                        thead
+                            tr
+                                th Username
+                                th Date
+                                th Tittle
+                                th Status
+                                th 
+                        tbody
+                        each status in statusLists
+                            tr
+                                td #{status.username}
+                                td #{status.date}
+                                td #{status.tittle}
+                                td #{status.status}
+                                if username == status.username
+                                    td 
+                                        form.delete(action="/status/delete/" + `${status._id}`, method='POST')
+                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").btn1
+                                        a.butn(class='fa fa-pencil' href="/status/edit/" + `${status._id}`)
+                                else if role == constant.adminRole
+                                    td  
+                                        form.delete(action="/status/delete/" + `${status._id}`, method='POST')
+                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").btn1
+                                else 
+                                    td        
+            if pages != 1
+                    div.pagination
+                        ul
+                            // First Button
+                            if current == 1
+                                a.disabled First
+                            else 
+                                a(href='/status?page=' + 1) First
+                        
+                            // Prievious Button
+                            if current > 1
+                                a(href='/status?page=' +`${parseInt(current) - 1}`) Previous
+                        
+                            // Number Button
+                            - var i = 1
+                            while i <= pages 
+                                if current == i 
+                                    a.active= i++
+                                else 
+                                    a(href='/status?page='+`${i}`)= i++
+                        
+                            // Next Button
+                            if current < pages
+                                a(href='/status?page=' +`${parseInt(current) + 1}`) Next
+                        
+                            // Last button
+                            if current == pages 
+                                a.disabled Last
+                            else 
+                                a(href='/status?page=' + `${pages}`) Last
+        else 
+            a This user still no post status or private his/her status

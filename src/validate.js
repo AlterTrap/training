@@ -40,8 +40,8 @@ const isNotDate = (val) => {
     return moment(val, "DD/MM/YYYY").isValid()
 }
 
-const requireRole = (val) => {
-    if (val == null){
+const required = (val) => {
+    if (val != null){
         return true;
     } else {
         return false;
@@ -56,4 +56,4 @@ const checkRoleVal = (val) => {
     }
 }
 
-module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate, checkRoleVal, requireRole};
+module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate, checkRoleVal, required};

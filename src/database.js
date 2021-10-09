@@ -1,5 +1,6 @@
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
+const ObjectId = mongodb.ObjectId;
 
 let _db;
 
@@ -27,4 +28,4 @@ const getDb = () => {
     throw 'No database found!';
 };
 
-module.exports = {getDb ,mongoConnect};
+module.exports = {getDb ,mongoConnect, ObjectId};

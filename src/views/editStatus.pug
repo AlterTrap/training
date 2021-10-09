@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Post status
+        link(rel="stylesheet", href="/css/styles.css")
+        link(rel="stylesheet", href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+        link(rel="stylesheet", href="/resources/demos/style.css")
+    body 
+    div.wrap
+        form(action="/status/edit/" + `${id}`, method="post") 
+            h2 Post status
+            div.container
+                div(style="color: red")= msg
+                label(for="tittle") Tittle 
+                input#title(type="text", name="tittle", placeholder="...", value=tittleholder)
+                label(for="status") Status 
+                input#status(type="text", name="status", placeholder="...", value=statusholder)
+                button(type="submit") submit 

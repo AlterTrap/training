@@ -43,7 +43,7 @@ html(lang="en")
                                 if role_flg == constant.adminRole
                                     td
                                         form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
-                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn
+                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").btn1
                                         a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
                                 else if username == accounts.username
                                     td
