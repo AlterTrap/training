@@ -1,4 +1,6 @@
 const moment = require("moment");
+const adminRole = require("../src/constant").adminRole
+const memberRole = require("../src/constant").memberRole
 
 const checkLength = (val) => {
     // Check length in Username, Password and Password Comfirm
@@ -38,12 +40,20 @@ const isNotDate = (val) => {
     return moment(val, "DD/MM/YYYY").isValid()
 }
 
-const checkRoleVal = (val) => {
-    if(val > 1 || val < 0 ){
+const requireRole = (val) => {
+    if (val == null){
         return true;
     } else {
         return false;
     }
 }
 
-module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate, checkRoleVal};
+const checkRoleVal = (val) => {
+    if(val > adminRole || val < memberRole ){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+module.exports = {oneUpscalePass ,checkLength, checkNull, futureDay, isNotDate, checkRoleVal, requireRole};

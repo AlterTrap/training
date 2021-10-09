@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const database = require("../database");
-const moment = require("moment");
 
+const memberRole = require("../constant").memberRole;
+const constant = require("../constant")
 const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/", ensureAuthenticated, function (req, res) {
@@ -29,11 +30,12 @@ router.get("/", ensureAuthenticated, function (req, res) {
                 if (err) res.render("error", { errmsg: "Sever error" });
                 res.render("index", {
                     username: username,
-                    role_flg: role_flg || 0,
+                    role_flg: role_flg || memberRole,
                     userLists: userLists,
                     searchholder: searchName,
                     current: page,
-                    pages: Math.ceil(documentCount / perPage)
+                    pages: Math.ceil(documentCount / perPage),
+                    constant: constant
                 });
             });
     } else {
@@ -73,12 +75,13 @@ router.get("/", ensureAuthenticated, function (req, res) {
                 if (err) res.render("error", { errmsg: "Sever error" });
                 res.render("index", {
                     username: username,
-                    role_flg: role_flg || 0,
+                    role_flg: role_flg || memberRole,
                     searchUser: searchName,
                     userLists: userLists,
                     searchholder: searchName,
                     current: page,
-                    pages: Math.ceil(documentCount / perPage)
+                    pages: Math.ceil(documentCount / perPage),
+                    constant: constant
                 });
             });
     }

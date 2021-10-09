@@ -21,7 +21,7 @@ html(lang="en")
                 input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
                 label(for="bDay") Birthday 
                 input#bDay(type="text", name="birthday", value=bdayholder)
-                if role_flg == 1
+                if role_flg == constant.adminRole
                     select#role(name="role")
                         option(value='0', selected= role == 0) Member
                         option(value='1',selected= role == 1) Admin
