@@ -6,6 +6,7 @@ const passport = require("passport");
 const getDb = require('../database').getDb;
 const checkLength = require('../validate').checkLength;
 const oneUpscalePass = require('../validate').oneUpscalePass;
+const memberRole = require("../constant").memberRole;
 
 router.get("/login", function (req, res) {
     // If user is already logged in, then redirect
@@ -124,7 +125,7 @@ router.post("/signup", function (req, res) {
                 return bcrypt.hash(password, salt);
             })
             .then((hash) => {
-                let cusAcc = { username: username, password: hash };
+                let cusAcc = { username: username, password: hash, role_flg: memberRole };
                 // Save user info to DB
                 db.collection("users").insertOne(cusAcc);
                 passport.authenticate("local")(req, res, function () {

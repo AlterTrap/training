@@ -13,13 +13,17 @@ html(lang="en")
                 a Hello #{username}
                 br
                 button(type="submit" href='/logout') Logout 
+                br
+                a(href="/status")
+                    button(type="button") Status page
             form(action="/", method="get") 
                 label(for="searchUser") Search Users
                 br
                 input#searchUser(type="searchUser", name="searchUser", value=searchholder)
                 br
                 button(type="submit") submit
-                a.btn(href='/user/create') Add user
+                if role_flg == constant.adminRole
+                    a.btn(href='/user/create') Add user
             // Tabble
             if userLists.length
                 H User Lists
@@ -36,10 +40,16 @@ html(lang="en")
                                 td #{accounts.username}
                                 td #{accounts.name}
                                 td #{accounts.birthday}
-                                td
-                                    form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
-                                        button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn
-                                    a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
+                                if role_flg == constant.adminRole
+                                    td
+                                        form.delete(action="/user/delete/" + `${accounts.username}`, method='POST')
+                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").butn
+                                        a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
+                                else if username == accounts.username
+                                    td
+                                        a.butn(class='fa fa-pencil' href="/user/edit/" + `${accounts.username}`)
+                                else 
+                                    td
                 if pages != 1
                     div.pagination
                         ul

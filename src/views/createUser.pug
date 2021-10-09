@@ -25,4 +25,7 @@ html(lang="en")
                 input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder)
                 label(for="psw") Password
                 input#password(type="password", name="password", placeholder="Enter Password") 
+                select#role(name="role")
+                    option(value='0', selected= role == 0) Member
+                    option(value='1',selected= role == 1) Admin
                 button(type="submit") submit 

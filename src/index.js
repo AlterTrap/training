@@ -39,7 +39,7 @@ app.use("/", authentication);
 
 app.use("/", index);
 
-app.use("/user", userManagement)
+app.use("/user", userManagement);
 
 mongoConnect(() => {
     app.listen(port);

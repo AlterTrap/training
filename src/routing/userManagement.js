@@ -2,13 +2,16 @@ const express = require("express");
 const router = express.Router();
 const database = require("../database");
 const bcrypt = require("bcrypt");
-const moment = require("moment");
 
 const checkLength = require("../validate").checkLength;
 const oneUpscalePass = require("../validate").oneUpscalePass;
 const checkNull = require("../validate").checkNull;
 const futureDay = require("../validate").futureDay;
 const isNotDate = require("../validate").isNotDate;
+const checkRoleVal = require("../validate").checkRoleVal;
+const requireRole = require("../validate").requireRole;
+const adminRole = require("../constant").adminRole;
+const constant = require("../constant")
 const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/create", ensureAuthenticated, (req, res) => {
@@ -17,7 +20,7 @@ router.get("/create", ensureAuthenticated, (req, res) => {
 
 router.post("/create", function (req, res) {
     const db = database.getDb();
-    const { name, birthday, username, password } = req.body
+    const { name, birthday, username, password, role } = req.body
     const checkUsername = checkLength(username);
     const checkPassword = checkLength(password);
     const checkUps = oneUpscalePass(password);
@@ -27,6 +30,8 @@ router.post("/create", function (req, res) {
     const passwordNull = checkNull(password)
     const isDate = isNotDate(birthday);
     const inFuture = futureDay(birthday);
+    const invalidRole = checkRoleVal(role);
+    const isRequireRole = requireRole(role);
 
     if (nameNull){
         return res.render("createUser", {
@@ -34,6 +39,7 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "Please fill name field"
         });
     }
@@ -44,6 +50,7 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "Please fill username field"
         });
     }
@@ -54,6 +61,7 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "Please choose birthday"
         });
     }
@@ -63,6 +71,7 @@ router.post("/create", function (req, res) {
             username: username,
             usernameholder: username,
             nameholder: name,
+            role: role,
             msg: "Please input correct date with format DD/MM/YYYY",
         });
     }
@@ -73,6 +82,7 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "The birhday can not be in future"
         });
     }
@@ -83,6 +93,7 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "Please fill password field"
         });
     }
@@ -93,6 +104,7 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "Username Not enough 6 letters",
         });
     }
@@ -103,6 +115,7 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "Passsword Not enough 6 letters",
         });
     }
@@ -113,7 +126,18 @@ router.post("/create", function (req, res) {
             usernameholder: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
             msg: "Password require 1 upscale letter",
+        });
+    }
+
+    if (invalidRole || isRequireRole){
+        return res.render("createUser", {
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: birthday,
+            msg: "Please choose role member in box dropdown",
         });
     }
 
@@ -125,13 +149,7 @@ router.post("/create", function (req, res) {
             if (!user) {
                 return bcrypt.genSalt(10);
             } else {
-                return res.render("createUser", {
-                    username: username,
-                    usernameholder: username,
-                    nameholder: name,
-                    bdayholder: convertBday,
-                    msg: "Username already exist",
-                });
+                throw "Username already exist";
             }
         })
         .then((salt) => {
@@ -144,45 +162,69 @@ router.post("/create", function (req, res) {
                 birthday: birthday,
                 username: username,
                 password: hash,
+                role_flg: role
             };
             // Save user info to DB
             db.collection("users").insertOne(cusAcc);
             res.redirect("/");
+        }).catch(err => {
+            return res.render("createUser", {
+                username: username,
+                usernameholder: username,
+                nameholder: name,
+                bdayholder: birthday,
+                role: role,
+                msg: err,
+            });
         });
 });
 
 router.get("/edit/:username", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const username = req.params.username;
+    const accRole = req.session.passport.user.role_flg;
+    const loggedUser = req.session.passport.user.username;
+
+    if(accRole != adminRole && loggedUser != username){
+        return res.render("error", {errmsg: "This page is not exist"});
+    }
+
     db.collection("users")
         .findOne({ username })
         .then((user) => {
             res.render("editUser", {
                 username: username,
                 nameholder: user.name,
-                bdayholder: user.birthday || "",
+                bdayholder: user.birthday,
                 username: user.username,
-                moment: moment
+                role_flg: accRole,
+                role: user.role_flg,
+                constant: constant
             });
         });
 });
 
 router.post("/edit/:username", function (req, res) {
     const db = database.getDb();
-    const {name, birthday} = req.body;
+    const {name, birthday, role} = req.body;
     const username = req.params.username;
+    const accRole = req.session.passport.user.role_flg;
     const nameNull = checkNull(name);
     const bDayull = checkNull(birthday);
     const isDate = isNotDate(birthday);
     const inFuture = futureDay(birthday);
+    const invalidRole = checkRoleVal(role);
+    const isRequireRole = requireRole(role);
 
     if (nameNull){
         return res.render("editUser", {
             username: username,
             nameholder: name,
             bdayholder: birthday ,
+            role: role,
+            role_flg: accRole,
+            constant: constant,
             msg: "Please fill name field",
-            moment: moment
         });
     }
 
@@ -191,8 +233,10 @@ router.post("/edit/:username", function (req, res) {
             username: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
+            role_flg: accRole,
+            constant: constant,
             msg: "Please choose birthday",
-            moment: moment
         });
     }
 
@@ -200,8 +244,10 @@ router.post("/edit/:username", function (req, res) {
         return res.render("editUser", {
             username: username,
             nameholder: name,
+            role: role,
+            role_flg: accRole,
+            constant: constant,
             msg: "Please input correct date with format DD/MM/YYYY",
-            moment: moment
         });
     }
 
@@ -210,15 +256,28 @@ router.post("/edit/:username", function (req, res) {
             username: username,
             nameholder: name,
             bdayholder: birthday,
+            role: role,
+            role_flg: accRole,
+            constant: constant,
             msg: "The birhday can not be in future",
-            moment: moment
+        });
+    }
+
+    if (invalidRole || isRequireRole) {
+        return res.render("editUser", {
+            username: username,
+            nameholder: name,
+            bdayholder: birthday ,
+            role_flg: accRole,
+            constant: constant,
+            msg: "Please choose role member in box dropdown",
         });
     }
 
     db.collection("users")
         .findOneAndUpdate(
             { username: username },
-            { $set: { name: name, birthday: birthday } }
+            { $set: { name: name, birthday: birthday, role_flg: role } }
         )
         .then(res.redirect("/"));
 });
