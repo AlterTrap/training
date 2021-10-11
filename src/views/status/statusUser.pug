@@ -13,6 +13,12 @@ html(lang="en")
             button(type="button") Post some status
         a.button(href="/")
             button(type="button") back
+        form(action="/status", method="get") 
+                label(for="searchStatus") Search
+                br
+                input#searchStatus(type="searchStatus", name="searchStatus", value=searchholder)
+                br
+                button(type="submit") submit
         if statusLists.length
             H All status
                     table(width='100%', cellspacing='1', cellpadding='1', border='1', bgcolor='#F2F2F2')
@@ -28,17 +34,17 @@ html(lang="en")
                             tr
                                 td #{status.username}
                                 td #{status.date}
-                                td #{status.tittle}
-                                td #{status.status}
+                                td.break #{status.tittle}
+                                td.break #{status.status}
                                 if username == status.username
                                     td 
                                         form.delete(action="/status/delete/" + `${status._id}`, method='POST')
-                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").btn1
+                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure you want to delete?')").btn1
                                         a.butn(class='fa fa-pencil' href="/status/edit/" + `${status._id}`)
                                 else if role == constant.adminRole
                                     td  
                                         form.delete(action="/status/delete/" + `${status._id}`, method='POST')
-                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure to delete?')").btn1
+                                            button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure you want to delete?')").btn1
                                 else 
                                     td        
             if pages != 1
@@ -48,28 +54,46 @@ html(lang="en")
                             if current == 1
                                 a.disabled First
                             else 
-                                a(href='/status?page=' + 1) First
+                                if searchStatus == null
+                                    a(href='/status?page=' + 1) First
+                                else 
+                                    a(href='/status?searchStatus=' + `${searchStatus}` + '&page=' + 1 ) First
                         
                             // Prievious Button
                             if current > 1
-                                a(href='/status?page=' +`${parseInt(current) - 1}`) Previous
+                                if searchStatus == null
+                                    a(href='/status?page=' +`${parseInt(current) - 1}`) Previous
+                                else 
+                                    a(href='/status?searchStatus='+ `${searchStatus}` + '&page=' +`${parseInt(current) - 1}`) Previous
                         
                             // Number Button
                             - var i = 1
                             while i <= pages 
-                                if current == i 
-                                    a.active= i++
+                                if searchStatus == null
+                                    if current == i 
+                                        a.active= i++
+                                    else 
+                                        a(href='/status?page='+`${i}`)= i++
                                 else 
-                                    a(href='/status?page='+`${i}`)= i++
-                        
+                                    if current == i 
+                                        a.active= i++ 
+                                    else 
+                                        a(href='/status?searchStatus='+ `${searchStatus}` + '&page=' +`${i}`)= i++
+
                             // Next Button
                             if current < pages
-                                a(href='/status?page=' +`${parseInt(current) + 1}`) Next
+                                if searchStatus == null
+                                    a(href='/status?page=' +`${parseInt(current) + 1}`) Next
+                                else 
+                                    a(href='/status?searchStatus='+ `${searchStatus}` + '&page=' +`${parseInt(current) + 1}`) Next
                         
                             // Last button
                             if current == pages 
                                 a.disabled Last
                             else 
-                                a(href='/status?page=' + `${pages}`) Last
+                                if searchStatus == null
+                                    a(href='/status?page=' + `${pages}`) Last
+                                else 
+                                    a(href='/status?searchStatus='+ `${searchStatus}` + '&page=' + `${pages}` ) Last
         else 
-            a This user still no post status or private his/her status
+            a No status

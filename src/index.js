@@ -31,7 +31,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.set("views", path.join(__dirname, "views"));
+app.set("views", [path.join(__dirname, "views"),path.join(__dirname, "views/user"), path.join(__dirname, "views/status")]);
 app.set("view engine", "pug");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")))

@@ -95,3 +95,7 @@ H {
     margin: auto;
     height: auto;
 }
+
+.break {
+    word-break: normal;
+}
