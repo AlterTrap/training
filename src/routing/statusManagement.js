@@ -299,6 +299,8 @@ router.post("/status/edit/:id", function (req, res) {
     const id = req.params.id;
     const checkNullTittle = checkNull(tittle);
     const checkNullStatus = checkNull(status);
+    const blankTittle = checkBlank(tittle);
+    const blankStatus = checkBlank(status);
 
     if (checkNullTittle) {
         return res.render("editStatus", {
