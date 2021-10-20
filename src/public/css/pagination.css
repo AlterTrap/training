@@ -1,8 +1,22 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.left {
+    float: left;
+}
+
 .pagination {
     margin: 20px 0;
     overflow: hidden;
     position: relative;
-    display: inline-block;
+    float: right;
 }
 
 .pagination a {
@@ -39,15 +53,11 @@
 .wrap {
     display: flex;
     flex-flow: column;
-    align-items: center;
-}
-
-form,
-H {
-    width: 400px;
+    align-items: left;
     margin: auto;
     height: auto;
 }
+
 .btn {
     background-color: blue;
     border-radius: 28px;
@@ -98,4 +108,75 @@ H {
 
 .break {
     word-break: normal;
+}
+
+.sidebar a:hover:not(.active) {
+    background-color: #0d6efd;
+    border-radius: 5px;
+}
+
+.table-responsive {
+    margin: 30px 0;
+}
+
+.table-wrapper {
+    min-width: 1000px;
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.table-title {
+    padding-bottom: 15px;
+    background: #435d7d;
+    color: #fff;
+    padding: 16px 30px;
+    margin: -20px -25px 10px;
+    border-radius: 3px 3px 0 0;
+}
+
+.table-title h2 {
+    margin: 5px 0 0;
+    font-size: 24px;
+}
+
+.table-title .btn {
+    color: #fff;
+    float: right;
+    font-size: 13px;
+    border: none;
+    min-width: 50px;
+    border-radius: 2px;
+    border: none;
+    outline: none !important;
+    margin-left: 10px;
+}
+
+.table-title .btn i {
+    float: left;
+    font-size: 21px;
+    margin-right: 5px;
+}
+
+.table-title .btn span {
+    margin-top: 2px;
+}
+
+table.table tr th:last-child {
+    width: 100px;
+}
+
+table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #fcfcfc;
+}
+
+table.table-striped.table-hover tbody tr:hover {
+    background: #f5f5f5;
+}
+
+table.table th i {
+    font-size: 13px;
+    margin: 0 5px;
+    cursor: pointer;
 }
