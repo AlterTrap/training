@@ -6,12 +6,17 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Status
         link(rel="stylesheet", href="/css/pagination.css")
+        link(rel="stylesheet", href="/css/post.css")
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
-        link(rel="stylesheet", href="/css/bootstrap.min.css")
+        //- link(rel="stylesheet", href="/css/bootstrap.min.css")
         link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css", integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3",crossorigin="anonymous")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous") 
+        script(src="https://code.jquery.com/jquery-1.12.4.js") 
+        script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js") 
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous")
+        script(src="/Jquery/collapse.js")
     body
-    div.full-height(class="d-flex") 
+    div(class="d-flex") 
         div(class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark",style="width: 280px;")
             a(href="/", class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none")
                 span(class="fs-4") Sidebar
@@ -42,43 +47,89 @@ html(lang="en")
                     hr(class="dropdown-divider")
                 li 
                     a(class="dropdown-item" href="/logout") Log out
-        div.wrap
+        div(class="container")
             a.button(href="/status/create")
-                button(type="button") Post some status
-            form(action="/status", method="get") 
-                    label(for="searchStatus") Search
-                    br
-                    input#searchStatus(type="searchStatus", name="searchStatus", value=searchholder)
-                    br
-                    button(type="submit") submit
+                button(class="btn btn-outline-primary",type="button") Post some status
+            form.left(action="/", method="get") 
+                div(class="input-group")
+                    div(class="input-group-prepend")
+                        input#searchUser(class="form-control",type="searchUser", name="searchUser", value=searchholder)
+                            //- label(class="form-label",for="searchUser") Search Users
+                    button(class="fa fa-search btn btn-primary",type="submit")
             if statusLists.length
-                H All status
-                        table(width='100%', cellspacing='1', cellpadding='1', border='1', bgcolor='#F2F2F2')
-                            thead
-                                tr
-                                    th Username
-                                    th Date
-                                    th Tittle
-                                    th Status
-                                    th 
-                            tbody
-                            each status in statusLists
-                                tr
-                                    td #{status.username}
-                                    td #{status.date}
-                                    td.break #{status.tittle}
-                                    td.break #{status.status}
-                                    if username == status.username
-                                        td 
-                                            form.delete(action="/status/delete/" + `${status._id}`, method='POST')
-                                                button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure you want to delete?')").btn1
-                                            a.butn(class='fa fa-pencil' href="/status/edit/" + `${status._id}`)
-                                    else if role == constant.adminRole
-                                        td  
-                                            form.delete(action="/status/delete/" + `${status._id}`, method='POST')
-                                                button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure you want to delete?')").btn1
-                                    else 
-                                        td        
+                div(class="col-md-12 col-lg-12")
+                    -var o = 1;
+                    each status in statusLists
+                        article(class="post vt-post")
+                            div
+                                div.width(class="d-flex col-xs-12 col-sm-5 col-md-5 col-lg-4")
+                                        div(class="post-type post-img")
+                                            a.user-info(href="#") 
+                                                h3 #{status.username}
+                                        div(class="caption")
+                                            h3(class="md-heading") 
+                                                div(class="d-flex justify-content-between")
+                                                    a #{status.title}
+                                                    a.right(href="#",class="px-3 d-flex align-items-center text-decoration-none dropdown-toggle",id="dropdownUser1",data-bs-toggle="dropdown",aria-expanded="false")
+                                                    ul(class="dropdown-menu dropdown-menu-white text-small shadow",aria-labelledby="dropdownUser1")
+                                                        if username == status.username
+                                                            li
+                                                                a(class="dropdown-item fa fa-pencil" href="/status/edit/" + `${status._id}`)  Edit
+                                                                
+                                                            li
+                                                                hr(class="dropdown-divider")
+                                                            li 
+                                                                form(action="/status/delete/" + `${status._id}`, method='POST')
+                                                                    button(class="dropdown-item fa fa-trash",type="submit",onClick="return confirm('Are you sure you want to delete?')")  Delete
+                                                        else if role == constant.adminRole
+                                                            li 
+                                                                form(action="/status/delete/" + `${status._id}`, method='POST')
+                                                                    button(class="dropdown-item fa fa-trash",type="submit",onClick="return confirm('Are you sure you want to delete?')") Delete
+                                            //- li  
+                                            //-     div(class="info")
+                                            //-         p Comments: 
+                                            //-         strong N/A
+                            div
+                                div.width(class="d-flex col-xs-12 col-sm-7 col-md-7 col-lg-8")
+                                    div(class="author-info author-info-2")
+                                        ul(class="list-inline")
+                                            li
+                                                div(class="info")
+                                                    p Posted on:
+                                                    strong #{status.date}
+                                    div(id="module",class="caption")
+                                        p(class="collapse" id="collapseExample"+`${o}` aria-expanded="false") #{status.status}
+                                        a(class="collapsed" data-bs-toggle="collapse" href="#collapseExample"+`${o}` role="button" aria-expanded="false" aria-controls="collapseExample"+`${o}`)
+                                        -o++
+                                        //- a(href="javascript:void();", class="readmore-btn") Read more
+                            
+                //- H All status
+                //-         table(width='100%', cellspacing='1', cellpadding='1', border='1', bgcolor='#F2F2F2')
+                //-             thead
+                //-                 tr
+                //-                     th Username
+                //-                     th Date
+                //-                     th Title
+                //-                     th Status
+                //-                     th 
+                //-             tbody
+                //-             each status in statusLists
+                //-                 tr
+                //-                     td #{status.username}
+                //-                     td #{status.date}
+                //-                     td.break #{status.title}
+                //-                     td.break #{status.status}
+                //-                     if username == status.username
+                //-                         td 
+                //-                             form.delete(action="/status/delete/" + `${status._id}`, method='POST')
+                //-                                 button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure you want to delete?')").btn1
+                //-                             a.butn(class='fa fa-pencil' href="/status/edit/" + `${status._id}`)
+                //-                     else if role == constant.adminRole
+                //-                         td  
+                //-                             form.delete(action="/status/delete/" + `${status._id}`, method='POST')
+                //-                                 button(type='submit' class='fa fa-trash' onClick="return confirm('Are you sure you want to delete?')").btn1
+                //-                     else 
+                //-                         td        
                 if pages != 1
                         div.pagination
                             ul

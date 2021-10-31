@@ -102,8 +102,8 @@ body {
 
 .button {
     width: 400px;
-    margin: auto;
-    height: auto;
+    /* margin: auto;
+    height: auto; */
 }
 
 .break {

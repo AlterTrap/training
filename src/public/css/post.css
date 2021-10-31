@@ -1,0 +1,209 @@
+.width {
+    width: 100% !important;
+}
+
+body {
+    margin-top: 20px;
+    background: #dcdcdc;
+}
+
+.content {
+    padding: 35px 0px;
+}
+
+.post {
+    width: 100%;
+    float: left;
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
+    background: #fff;
+    margin-bottom: 40px;
+    border-radius: 3px;
+}
+
+.post .post-type {
+    float: left;
+    width: 40%;
+}
+
+.post .post-img a {
+    display: block;
+    min-height: 20vh;
+}
+
+.post .post-img:hover a img {
+    opacity: 0.7;
+}
+
+.post-detail .post .caption {
+    padding: 55px 45px 0px 45px;
+}
+
+.post .caption {
+    border-bottom: 1px solid #ddd;
+    float: left;
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+}
+
+.post .caption h3 {
+    margin: 0px 0px 20px 0px;
+    color: #36a0e7;
+    font-weight: 300;
+    font-size: 34px;
+    line-height: 42px;
+}
+
+.post .caption p {
+    line-height: 28px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    word-break: normal;
+}
+
+.post .author-info {
+    /* padding: 15px 15px 15px 15px; */
+    text-align: left;
+    min-height: 60px;
+    border-bottom: 1px solid #ddd;
+    background: #fcfcfc;
+    float: left;
+    width: 40%;
+}
+
+.user-info {
+    border-radius: 0px 0px 0px 3px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 23px;
+}
+
+.post .author-info .list-inline {
+    margin: 0px;
+}
+
+.post .author-info ul li:first-child {
+    border-left: none;
+    padding-left: 0px;
+}
+
+.post .author-info ul li p {
+    line-height: 16px;
+    color: #3b4952;
+    font-weight: 300;
+    font-size: 14px;
+    margin: 0px;
+}
+
+.post .author-info ul li a:hover {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+.post .author-info ul li .info {
+    padding: 10px;
+    float: left;
+}
+
+.post .author-info.author-info-2 ul li:first-child {
+    border-left: none;
+    padding-left: 0px;
+}
+
+.post .author-info.author-info-2 ul li .icon-box {
+    font-size: 28px;
+}
+
+.vt-post.post .author-info ul li {
+    padding-left: 15px;
+    /* padding-right: 15px; */
+    float: none;
+}
+
+.vt-post.post .author-info {
+    border-radius: 0px 0px 0px 3px;
+    border-bottom: none;
+    border-right: 1px solid #ddd;
+    /* padding: 15px 12px 15px 12px; */
+}
+
+.vt-post.post .post-img a h3 {
+    border-radius: 3px 0px 0px 0px;
+}
+
+.post .caption h3 {
+    margin: 0px 0px 20px 0px;
+    color: #36a0e7;
+    font-weight: 300;
+    font-size: 34px;
+    line-height: 42px;
+    word-break: normal;
+}
+.md-heading {
+    font-size: 24px !important;
+    line-height: 36px !important;
+    margin-bottom: 15px !important;
+}
+
+.pagination-wrap {
+    width: 100%;
+    float: left;
+    margin-bottom: 35px;
+}
+
+.pagination {
+    margin: 0px;
+}
+
+.borderright {
+    border-right: 1px solid #ddd;
+    padding-right: 0px !important;
+    overflow: auto;
+    display: block;
+}
+
+.paddingleft {
+    padding-left: 2px !important;
+}
+
+.a {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: white;
+    /* text-decoration: underline; */
+    cursor: pointer;
+}
+
+.right {
+    padding: 10px;
+    float: right;
+}
+
+.left {
+    padding: 10px;
+    float: left;
+}
+
+#module p.collapse:not(.show) {
+    display: block;
+    height: 3rem;
+    overflow: hidden;
+}
+
+#module p.collapsing {
+    height: 3rem;
+}
+
+#module a.collapsed::after {
+    content: "Show More";
+}
+
+#module a:not(.collapsed)::after {
+    content: "Show Less";
+}

@@ -21,7 +21,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
         db.collection("posts")
             .find(
                 {},
-                { projection: { username: 1, tittle: 1, status: 1, date: 1 } }
+                { projection: { username: 1, title: 1, status: 1, date: 1 } }
             )
             .count(function (err, documentCount) {
                 if (err) res.render("error", { errmsg: "Sever error" });
@@ -49,7 +49,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                 {
                     $project: {
                         _id: 1,
-                        tittle: 1,
+                        title: 1,
                         username: {
                             $arrayElemAt: ["$output.username", 0],
                         },
@@ -106,7 +106,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                 {
                     $project: {
                         _id: 1,
-                        tittle: 1,
+                        title: 1,
                         username: {
                             $arrayElemAt: ["$output.username", 0],
                         },
@@ -124,7 +124,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                                 },
                             },
                             { date: { $regex: searchStatus, $options: "i" } },
-                            { tittle: { $regex: searchStatus, $options: "i" } },
+                            { title: { $regex: searchStatus, $options: "i" } },
                             { status: { $regex: searchStatus, $options: "i" } },
                         ],
                     },
@@ -138,7 +138,6 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
         if(documentCount.length){
             count = Object.values(documentCount[0]);
         } 
-
 
         let status = await db
             .collection("posts")
@@ -161,7 +160,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                 {
                     $project: {
                         _id: 1,
-                        tittle: 1,
+                        title: 1,
                         username: {
                             $arrayElemAt: ["$output.username", 0],
                         },
@@ -179,7 +178,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                                 },
                             },
                             { date: { $regex: searchStatus, $options: "i" } },
-                            { tittle: { $regex: searchStatus, $options: "i" } },
+                            { title: { $regex: searchStatus, $options: "i" } },
                             { status: { $regex: searchStatus, $options: "i" } },
                         ],
                     },
@@ -217,39 +216,39 @@ router.get("/status/create", ensureAuthenticated, (req, res) => {
 router.post("/status/create", (req, res) => {
     const db = database.getDb();
     const accID = req.session.passport.user.id;
-    const { tittle, status } = req.body;
+    const { title, status } = req.body;
     const date = new Date();
     const convertDate = moment(date).format("DD/MM/YYYY HH:mm");
     const cusStatus = {
         userid: accID,
         date: convertDate,
-        tittle: tittle,
+        title: title,
         status: status,
     };
-    const checkNullTittle = checkNull(tittle);
+    const checkNullTitle = checkNull(title);
     const checkNullStatus = checkNull(status);
-    const blankTittle = checkBlank(tittle);
+    const blankTitle = checkBlank(title);
     const blankStatus = checkBlank(status);
 
-    if (checkNullTittle) {
+    if (checkNullTitle) {
         return res.render("createStatus", {
-            tittleholder: tittle,
+            titleholder: title,
             statusholder: status,
-            msg: "Please fill tittle field",
+            msg: "Please fill title field",
         });
     }
 
     if (checkNullStatus) {
         return res.render("createStatus", {
-            tittleholder: tittle,
+            titleholder: title,
             statusholder: status,
             msg: "Please fill status field",
         });
     }
 
-    if (!blankTittle || !blankStatus) {
+    if (!blankTitle || !blankStatus) {
         return res.render("createStatus", {
-            msg: "Tittle and status must not blank",
+            msg: "Title and status must not blank",
         });
     }
 
@@ -273,7 +272,7 @@ router.get("/status/edit/:id", ensureAuthenticated, (req, res) => {
             {
                 projection: {
                     _id: 1,
-                    tittle: 1,
+                    title: 1,
                     status: 1,
                     userid: 1,
                 },
@@ -287,7 +286,7 @@ router.get("/status/edit/:id", ensureAuthenticated, (req, res) => {
             }
             res.render("editStatus", {
                 id: post._id,
-                tittleholder: post.tittle,
+                titleholder: post.title,
                 statusholder: post.status,
             });
         });
@@ -295,42 +294,42 @@ router.get("/status/edit/:id", ensureAuthenticated, (req, res) => {
 
 router.post("/status/edit/:id", function (req, res) {
     const db = database.getDb();
-    const { tittle, status } = req.body;
+    const { title, status } = req.body;
     const id = req.params.id;
-    const checkNullTittle = checkNull(tittle);
+    const checkNullTitle = checkNull(title);
     const checkNullStatus = checkNull(status);
-    const blankTittle = checkBlank(tittle);
+    const blankTitle = checkBlank(title);
     const blankStatus = checkBlank(status);
 
-    if (checkNullTittle) {
+    if (checkNullTitle) {
         return res.render("editStatus", {
             id: id,
-            tittleholder: tittle,
+            titleholder: title,
             statusholder: status,
-            msg: "Please fill tittle field",
+            msg: "Please fill title field",
         });
     }
 
     if (checkNullStatus) {
         return res.render("editStatus", {
             id: id,
-            tittleholder: tittle,
+            titleholder: title,
             statusholder: status,
             msg: "Please fill status field",
         });
     }
 
-    if (!blankTittle || !blankStatus) {
+    if (!blankTitle || !blankStatus) {
         return res.render("editStatus", {
             id: id,
-            msg: "Tittle and status must not blank",
+            msg: "Title and status must not blank",
         });
     }
 
     db.collection("posts")
         .findOneAndUpdate(
             { _id: database.ObjectId(id) },
-            { $set: { tittle: tittle, status: status } }
+            { $set: { title: title, status: status } }
         )
         .then(res.redirect("/status"));
 });
