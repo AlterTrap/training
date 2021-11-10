@@ -69,18 +69,21 @@ html(lang="en")
                                             h3(class="md-heading") 
                                                 div(class="d-flex justify-content-between")
                                                     a(class="text-break") #{status.title}
-                                                    a.right(href="#",class="px-3 d-flex align-items-center text-decoration-none dropdown-toggle",id="dropdownUser1",data-bs-toggle="dropdown",aria-expanded="false")
-                                                    ul(class="dropdown-menu dropdown-menu-white text-small shadow",aria-labelledby="dropdownUser1")
-                                                        if username == status.username
+                                                    if username != status.username && role != constant.adminRole
+                                                        a  
+                                                    else
+                                                        a.right(href="#",class="px-3 d-flex align-items-center text-decoration-none dropdown-toggle",id="dropdownUser1",data-bs-toggle="dropdown",aria-expanded="false")
+                                                    if username == status.username 
+                                                        ul(class="dropdown-menu dropdown-menu-white text-small shadow",aria-labelledby="dropdownUser1")
                                                             li
-                                                                a(class="dropdown-item fa fa-pencil" href="/status/edit/" + `${status._id}`)  Edit
-                                                                
+                                                                a(class="dropdown-item fa fa-pencil" href="/status/edit/" + `${status._id}`)  Edit    
                                                             li
                                                                 hr(class="dropdown-divider")
                                                             li 
                                                                 form(action="/status/delete/" + `${status._id}`, method='POST')
                                                                     button(class="dropdown-item fa fa-trash",type="submit",onClick="return confirm('Are you sure you want to delete?')")  Delete
-                                                        else if role == constant.adminRole
+                                                    if role == constant.adminRole
+                                                        ul(class="dropdown-menu dropdown-menu-white text-small shadow",aria-labelledby="dropdownUser1")
                                                             li 
                                                                 form(action="/status/delete/" + `${status._id}`, method='POST')
                                                                     button(class="dropdown-item fa fa-trash",type="submit",onClick="return confirm('Are you sure you want to delete?')") Delete
