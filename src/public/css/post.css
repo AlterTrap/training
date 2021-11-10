@@ -30,6 +30,7 @@ body {
 .post .post-img a {
     display: block;
     min-height: 20vh;
+    border-top: 1px solid #ddd;
 }
 
 .post .post-img:hover a img {
@@ -41,8 +42,9 @@ body {
 }
 
 .post .caption {
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #ddd; */
     border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
     float: left;
     width: 100%;
     text-align: left;
