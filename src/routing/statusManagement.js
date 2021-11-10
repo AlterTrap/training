@@ -55,11 +55,17 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                         },
                         status: 1,
                         date: 1,
+                        dateConvert: {
+                            $dateFromString: {
+                               dateString: '$date',
+                               format: "%d/%m/%Y %H:%M"
+                            }
+                         }
                     },
                 },
                 {
                     $sort: {
-                        date: -1,
+                        dateConvert: -1,
                     },
                 },
                 {
@@ -166,6 +172,12 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                         },
                         status: 1,
                         date: 1,
+                        dateConvert: {
+                            $dateFromString: {
+                               dateString: '$date',
+                               format: "%d/%m/%Y %H:%M"
+                            }
+                         },
                     },
                 },
                 {
@@ -185,7 +197,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                 },
                 {
                     $sort: {
-                        date: -1,
+                        dateConvert: -1,
                     },
                 },
                 {
@@ -210,7 +222,8 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
 });
 
 router.get("/status/create", ensureAuthenticated, (req, res) => {
-    res.render("createStatus");
+    const loggedUser = req.session.passport.user.username;
+    res.render("createStatus", {loggedUser: loggedUser});
 });
 
 router.post("/status/create", (req, res) => {
@@ -259,6 +272,7 @@ router.get("/status/edit/:id", ensureAuthenticated, (req, res) => {
     const db = database.getDb();
     const id = req.params.id;
     const accID = req.session.passport.user.id
+    const loggedUser = req.session.passport.user.username;
 
     if (!database.ObjectId.isValid(id)) {
         return res.render("error", {
@@ -285,6 +299,7 @@ router.get("/status/edit/:id", ensureAuthenticated, (req, res) => {
                 });
             }
             res.render("editStatus", {
+                loggedUser: loggedUser,
                 id: post._id,
                 titleholder: post.title,
                 statusholder: post.status,

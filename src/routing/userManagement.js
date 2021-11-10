@@ -14,7 +14,8 @@ const constant = require("../constant")
 const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/create", ensureAuthenticated, (req, res) => {
-    res.render("createUser");
+    const loggedUser = req.session.passport.user.username;
+    res.render("createUser",{loggedUser: loggedUser});
 });
 
 router.post("/create", function (req, res) {
@@ -192,6 +193,7 @@ router.get("/edit/:username", ensureAuthenticated, (req, res) => {
         .findOne({ username })
         .then((user) => {
             res.render("editUser", {
+                loggedUser: loggedUser,
                 username: username,
                 nameholder: user.name,
                 bdayholder: user.birthday,
