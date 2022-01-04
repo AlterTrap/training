@@ -53,6 +53,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                         username: {
                             $arrayElemAt: ["$output.username", 0],
                         },
+                        avatar: { $arrayElemAt: ['$output.avatar', 0] },
                         status: 1,
                         date: 1,
                         dateConvert: {
@@ -84,6 +85,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
             current: page,
             pages: Math.ceil(count / perPage),
             constant: constant,
+            searchholder: searchStatus
         });
     } else {
         if (searchStatus == "") {
@@ -116,6 +118,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
                         username: {
                             $arrayElemAt: ["$output.username", 0],
                         },
+                        avatar: { $arrayElemAt: ['$output.avatar', 0] },
                         status: 1,
                         date: 1,
                     },
@@ -217,6 +220,7 @@ router.get("/status", ensureAuthenticated, async (req, res) => {
             current: page,
             pages: Math.ceil(count / perPage),
             constant: constant,
+            searchholder: searchStatus
         });
     }
 });
@@ -229,6 +233,7 @@ router.get("/status/create", ensureAuthenticated, (req, res) => {
 router.post("/status/create", (req, res) => {
     const db = database.getDb();
     const accID = req.session.passport.user.id;
+    const loggedUser = req.session.passport.user.username;
     const { title, status } = req.body;
     const date = new Date();
     const convertDate = moment(date).format("DD/MM/YYYY HH:mm");
@@ -248,6 +253,7 @@ router.post("/status/create", (req, res) => {
             titleholder: title,
             statusholder: status,
             msg: "Please fill title field",
+            loggedUser: loggedUser
         });
     }
 
@@ -256,12 +262,14 @@ router.post("/status/create", (req, res) => {
             titleholder: title,
             statusholder: status,
             msg: "Please fill status field",
+            loggedUser: loggedUser
         });
     }
 
     if (!blankTitle || !blankStatus) {
         return res.render("createStatus", {
             msg: "Title and status must not blank",
+            loggedUser: loggedUser
         });
     }
 
@@ -315,6 +323,7 @@ router.post("/status/edit/:id", function (req, res) {
     const checkNullStatus = checkNull(status);
     const blankTitle = checkBlank(title);
     const blankStatus = checkBlank(status);
+    const loggedUser = req.session.passport.user.username;
 
     if (checkNullTitle) {
         return res.render("editStatus", {
@@ -322,6 +331,7 @@ router.post("/status/edit/:id", function (req, res) {
             titleholder: title,
             statusholder: status,
             msg: "Please fill title field",
+            loggedUser: loggedUser
         });
     }
 
@@ -331,6 +341,7 @@ router.post("/status/edit/:id", function (req, res) {
             titleholder: title,
             statusholder: status,
             msg: "Please fill status field",
+            loggedUser: loggedUser
         });
     }
 
@@ -338,6 +349,7 @@ router.post("/status/edit/:id", function (req, res) {
         return res.render("editStatus", {
             id: id,
             msg: "Title and status must not blank",
+            loggedUser: loggedUser
         });
     }
 
@@ -347,6 +359,33 @@ router.post("/status/edit/:id", function (req, res) {
             { $set: { title: title, status: status } }
         )
         .then(res.redirect("/status"));
+});
+
+router.get("/status/view/:id", ensureAuthenticated, (req, res) => {
+    const db = database.getDb();
+    const id = req.params.id;
+    const loggedUser = req.session.passport.user.username;
+
+    db.collection("posts")
+        .findOne(
+            { _id: database.ObjectId(id) },
+            {
+                projection: {
+                    _id: 1,
+                    title: 1,
+                    status: 1,
+                    userid: 1,
+                },
+            }
+        )
+        .then((post) => {
+            res.render("viewStatus", {
+                loggedUser: loggedUser,
+                id: post._id,
+                titleholder: post.title,
+                statusholder: post.status,
+            });
+        });
 });
 
 router.post("/status/delete/:id", ensureAuthenticated, (req, res) => {

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const database = require("../database");
 const bcrypt = require("bcrypt");
+const path = require('path');
 
 const checkLength = require("../validate").checkLength;
 const oneUpscalePass = require("../validate").oneUpscalePass;
@@ -11,6 +12,8 @@ const isNotDate = require("../validate").isNotDate;
 const checkRoleVal = require("../validate").checkRoleVal;
 const required = require("../validate").required;
 const constant = require("../constant")
+const upload = require('../uploadMiddleware');
+const Resize = require('../Resize');
 const ensureAuthenticated = require("../ensureAuthenticated");
 
 router.get("/create", ensureAuthenticated, (req, res) => {
@@ -18,9 +21,12 @@ router.get("/create", ensureAuthenticated, (req, res) => {
     res.render("createUser",{loggedUser: loggedUser});
 });
 
-router.post("/create", function (req, res) {
+router.post("/create",upload.single('avatar'), async function (req, res) {
+    const loggedUser = req.session.passport.user.username;
     const db = database.getDb();
     const { name, birthday, username, password, role } = req.body
+    const imagePath = path.join(process.cwd(), 'src/public/images');
+    const fileUpload = new Resize(imagePath);
     const checkUsername = checkLength(username);
     const checkPassword = checkLength(password);
     const checkUps = oneUpscalePass(password);
@@ -35,6 +41,7 @@ router.post("/create", function (req, res) {
 
     if (nameNull){
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -46,6 +53,7 @@ router.post("/create", function (req, res) {
 
     if (usernameNull){
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -57,6 +65,7 @@ router.post("/create", function (req, res) {
 
     if (bDayull){
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -68,6 +77,7 @@ router.post("/create", function (req, res) {
 
     if (!(isDate)) {
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -78,6 +88,7 @@ router.post("/create", function (req, res) {
 
     if (inFuture) {
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -89,6 +100,7 @@ router.post("/create", function (req, res) {
 
     if (passwordNull){
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -100,6 +112,7 @@ router.post("/create", function (req, res) {
 
     if (!checkUsername) {
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -111,6 +124,7 @@ router.post("/create", function (req, res) {
 
     if (!checkPassword) {
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -122,6 +136,7 @@ router.post("/create", function (req, res) {
 
     if (checkUps) {
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -133,6 +148,7 @@ router.post("/create", function (req, res) {
 
     if (invalidRole || !(isRequireRole)){
         return res.render("createUser", {
+            loggedUser: loggedUser,
             username: username,
             usernameholder: username,
             nameholder: name,
@@ -141,8 +157,11 @@ router.post("/create", function (req, res) {
         });
     }
 
-    // Check password and password comfirm
-    db.collection("users")
+    if (req.file) {
+        const filename = await fileUpload.save(req.file.buffer);
+
+        // Check password and password comfirm
+        db.collection("users")
         .findOne({ username })
         .then((user) => {
             //check user already in DB or not
@@ -162,13 +181,15 @@ router.post("/create", function (req, res) {
                 birthday: birthday,
                 username: username,
                 password: hash,
-                role_flg: role
+                role_flg: role,
+                avatar: filename || "default.png",
             };
             // Save user info to DB
             db.collection("users").insertOne(cusAcc);
             res.redirect("/");
         }).catch(err => {
             return res.render("createUser", {
+                loggedUser: loggedUser,
                 username: username,
                 usernameholder: username,
                 nameholder: name,
@@ -177,6 +198,46 @@ router.post("/create", function (req, res) {
                 msg: err,
             });
         });
+    } else {
+        // Check password and password comfirm
+    db.collection("users")
+    .findOne({ username })
+    .then((user) => {
+        //check user already in DB or not
+        if (!user) {
+            return bcrypt.genSalt(10);
+        } else {
+            throw "Username already exist";
+        }
+    })
+    .then((salt) => {
+        // Hash password
+        return bcrypt.hash(password, salt);
+    })
+    .then((hash) => {
+        let cusAcc = {
+            name: name,
+            birthday: birthday,
+            username: username,
+            password: hash,
+            role_flg: role,
+            avatar: "default.png",
+        };
+        // Save user info to DB
+        db.collection("users").insertOne(cusAcc);
+        res.redirect("/");
+    }).catch(err => {
+        return res.render("createUser", {
+            loggedUser: loggedUser,
+            username: username,
+            usernameholder: username,
+            nameholder: name,
+            bdayholder: birthday,
+            role: role,
+            msg: err,
+        });
+    });
+    }
 });
 
 router.get("/edit/:username", ensureAuthenticated, (req, res) => {
@@ -205,11 +266,14 @@ router.get("/edit/:username", ensureAuthenticated, (req, res) => {
         });
 });
 
-router.post("/edit/:username", function (req, res) {
+router.post("/edit/:username",upload.single('avatar'), async function (req, res) {
     const db = database.getDb();
+    const loggedUser = req.session.passport.user.username;
     const {name, birthday, role} = req.body;
     const username = req.params.username;
     const accRole = req.session.passport.user.role_flg;
+    const imagePath = path.join(process.cwd(), 'src/public/images');
+    const fileUpload = new Resize(imagePath);
     const nameNull = checkNull(name);
     const bDayull = checkNull(birthday);
     const isDate = isNotDate(birthday);
@@ -219,6 +283,7 @@ router.post("/edit/:username", function (req, res) {
 
     if (nameNull){
         return res.render("editUser", {
+            loggedUser: loggedUser,
             username: username,
             nameholder: name,
             bdayholder: birthday ,
@@ -231,6 +296,7 @@ router.post("/edit/:username", function (req, res) {
 
     if (bDayull){
         return res.render("editUser", {
+            loggedUser: loggedUser,
             username: username,
             nameholder: name,
             bdayholder: birthday,
@@ -243,6 +309,7 @@ router.post("/edit/:username", function (req, res) {
 
     if (!(isDate)) {
         return res.render("editUser", {
+            loggedUser: loggedUser,
             username: username,
             nameholder: name,
             role: role,
@@ -254,6 +321,7 @@ router.post("/edit/:username", function (req, res) {
 
     if (inFuture) {
         return res.render("editUser", {
+            loggedUser: loggedUser,
             username: username,
             nameholder: name,
             bdayholder: birthday,
@@ -266,6 +334,7 @@ router.post("/edit/:username", function (req, res) {
 
     if (invalidRole || !(isRequireRole)) {
         return res.render("editUser", {
+            loggedUser: loggedUser,
             username: username,
             nameholder: name,
             bdayholder: birthday ,
@@ -275,12 +344,24 @@ router.post("/edit/:username", function (req, res) {
         });
     }
 
-    db.collection("users")
+    if (req.file) {
+        const filename = await fileUpload.save(req.file.buffer);
+
+        db.collection("users")
         .findOneAndUpdate(
             { username: username },
-            { $set: { name: name, birthday: birthday, role_flg: role } }
+            { $set: { name: name, birthday: birthday, role_flg: role, avatar: filename} }
         )
         .then(res.redirect("/"));
+    } else {
+        db.collection("users")
+        .findOneAndUpdate(
+            { username: username },
+            { $set: { name: name, birthday: birthday, role_flg: role} }
+        )
+        .then(res.redirect("/"));
+    }
+
 });
 
 router.post("/delete/:username", ensureAuthenticated, (req, res) => {

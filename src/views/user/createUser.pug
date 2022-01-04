@@ -20,12 +20,14 @@ html(lang="en")
     div(class="d-flex")
         include ../sidebar.pug
         div.wrap(class="mx-auto")
-            form(action="/user/create", method="post") 
+            form(action="/user/create", method="post",enctype="multipart/form-data") 
                 h2 Create User
                 div.container
                     div(style="color: red")= msg
+                    label(for="avatar") Avatar
+                    input#avatar(type="file" name="avatar" class="input-group input-file")
                     label(for="name") Name 
-                    input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
+                    input#name(type="text", name="name", placeholder="Enter Username", value=nameholder, autofocus)
                     label(for="bday") Birthday 
                     input#bDay(type="text", name="birthday", placeholder="Enter Username", value=bdayholder)
                     label(for="uname") Username 
@@ -36,3 +38,5 @@ html(lang="en")
                         option(value='0', selected= role == 0) Member
                         option(value='1',selected= role == 1) Admin
                     button(type="submit") submit 
+                    a(href="/")
+                        button(type="button", style="margin-top: 10px!important") Back

@@ -6,6 +6,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Sign up
         link(rel="stylesheet", href="/css/styles.css")
+        script(src="/Jquery/focus.js")
     body 
     div.wrap
         form(action="/signup", method="post") 
@@ -13,7 +14,7 @@ html(lang="en")
             div.container
                 div(style="color: red")= msg
                 label(for="uname") Username 
-                input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder)
+                input#username(type="text", name="username", placeholder="Enter Username", value=usernameholder, autofocus)
                 label(for="psw") Password
                 input#password(type="password", name="password", placeholder="Enter Password") 
                 label(for="pswCfm") Password Comfirm

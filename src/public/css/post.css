@@ -11,6 +11,11 @@ body {
     padding: 35px 0px;
 }
 
+.wrapper {
+    display: flex;
+    height: 100%;
+}
+
 .post {
     width: 100%;
     float: left;
@@ -18,7 +23,7 @@ body {
     -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.4);
     background: #fff;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     border-radius: 3px;
 }
 
@@ -188,7 +193,8 @@ body {
 }
 
 .left {
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     float: left;
 }
 

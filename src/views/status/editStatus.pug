@@ -4,7 +4,7 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Post status
+        title Edit status
         link(rel="stylesheet", href="/css/styles.css")
         link(rel="stylesheet", href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
@@ -18,11 +18,13 @@ html(lang="en")
         include ../sidebar.pug
         div.wrap(class="mx-auto")
             form(action="/status/edit/" + `${id}`, method="post") 
-                h2 Post status
+                h2 Edit status
                 div.container
                     div(style="color: red")= msg
                     label(for="title") Title 
-                    input#title(type="text", name="title", placeholder="...", value=titleholder)
+                    input#title(type="text", name="title", placeholder="...", value=titleholder, autofocus)
                     label(for="status") Status 
                     input#status(type="text", name="status", placeholder="...", value=statusholder)
                     button(type="submit") submit 
+                    a(href="/status")
+                        button(type="button", style="margin-top: 10px!important") Back

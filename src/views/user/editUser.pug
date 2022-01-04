@@ -20,16 +20,20 @@ html(lang="en")
     div(class="d-flex")
         include ../sidebar.pug
         div.wrap(class="mx-auto")
-            form(action="/user/edit/" + `${username}`, method="post") 
+            form(action="/user/edit/" + `${username}`, method="post",enctype="multipart/form-data") 
                 h2 Edit user
                 div.container
                     div(style="color: red")= msg
                     label(for="name") Name 
-                    input#name(type="text", name="name", placeholder="Enter Username", value=nameholder)
+                    input#name(type="text", name="name", placeholder="Enter Username", value=nameholder, autofocus)
                     label(for="bDay") Birthday 
                     input#bDay(type="text", name="birthday", value=bdayholder)
+                    label(for="avatar") Avatar
+                    input#avatar(type="file" name="avatar" class="input-group input-file")
                     if role_flg == constant.adminRole
                         select#role(name="role")
                             option(value='0', selected= role == 0) Member
                             option(value='1',selected= role == 1) Admin
                     button(type="submit") submit 
+                    a(href="/")
+                        button(type="button", style="margin-top: 10px!important") Back

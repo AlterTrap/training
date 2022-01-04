@@ -25,6 +25,7 @@ app.use(
         secret: "mysupersecrect",
         resave: true,
         saveUninitialized: true,
+        cookie: { maxAge: 3600000 }
     })
 );
 
