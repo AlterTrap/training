@@ -1,0 +1,442 @@
+body {
+    height: 100%;
+    width: 100%;
+    background: whitesmoke;
+    font-family: Overpass, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.block {
+    display: block;
+}
+
+.header {
+    background: rgb(21, 20, 77);
+    width: 100%;
+    color: white;
+    height: 220px;
+    padding-top: 50px;
+}
+
+.wrap {
+    display: grid;
+    justify-items: center;
+    margin: 0 250px;
+    grid-template-columns: auto auto auto;
+}
+
+.seasons a {
+    text-decoration: none;
+    color: white;
+    outline: white;
+    text-align: center;
+    width: 80px;
+}
+
+.content {
+    margin-top: -110px;
+    margin-bottom: 80px;
+}
+
+.content-heading {
+    padding: 0 20px;
+    color: white;
+}
+
+.filter {
+    margin-top: -55px;
+    padding: 0 20px;
+    float: right;
+}
+
+.other-filter {
+    display: none;
+}
+
+.tool {
+    margin-left: 20px;
+}
+
+.seasons {
+    display: flex;
+}
+
+.other {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 12px;
+}
+
+.other a {
+    text-decoration: none;
+    color: white;
+    outline: white;
+    text-align: center;
+}
+
+.anime-list {
+    display: flex;
+    /* grid-template-columns: auto auto auto auto; */
+    flex-wrap: wrap;
+}
+
+.anime-list .anime {
+    margin: -20px 20px !important;
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: 185px auto;
+    border-radius: 3px;
+    width: 100%;
+    min-width: 0px;
+    border-collapse: collapse;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.info {
+    display: flex;
+    flex-flow: column;
+    background: white;
+    min-width: 0px;
+}
+
+.info-body {
+    display: flex;
+    flex-flow: column;
+}
+
+.tag {
+    display: flex;
+    margin-top: 2px;
+    background: rgb(216, 225, 240);
+    height: 40px;
+}
+
+.type-tag {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.tag-border {
+    text-align: center;
+    background: rgb(193, 148, 236);
+    color: rgb(34, 62, 116);
+    border-radius: 10px;
+    /* height: 20px;
+    width: auto; */
+    padding: 0 12px;
+    font-size: 14px;
+    margin-right: 11px;
+}
+
+.add-tag {
+    float: right;
+    margin-left: 5px;
+    margin-top: 2px;
+}
+
+.cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.img-cover {
+    display: block;
+    /* position: absolute; */
+    width: 185px;
+    height: 165px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.day-info {
+    margin: 20px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.count-down {
+    margin: -20px 20px;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.sequel {
+    margin: 20px;
+    font-size: 12px;
+}
+
+.description {
+    margin: 10px 10px 5px 20px;
+    font-size: 15px;
+    /* margin-bottom: 10px; */
+}
+
+.wrap .other .icon {
+    display: none;
+}
+
+@media (max-width: 1345px) {
+    .wrap {
+        margin: 0 50px;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+        outline: white;
+        text-align: center;
+    }
+
+    .content-heading {
+        margin: 0 10vw;
+    }
+
+    .content .anime-list {
+        display: grid;
+        grid-template-columns: auto auto;
+        margin-bottom: 60px;
+        justify-content: unset;
+        margin: 0 10vw;
+        column-gap: 40px;
+        row-gap: 40px;
+    }
+
+    .anime-list .anime {
+        margin: unset !important;
+        display: grid;
+        grid-template-columns: 185px auto;
+        height: 265px;
+        min-width: 370px;
+    }
+
+    .cover {
+        width: unset !important;
+        position: unset;
+        height: 265px;
+    }
+
+    .info-body {
+        width: unset !important;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: auto 42px;
+        min-height: 0px;
+        min-width: 0px;
+        line-height: 1rem;
+    }
+}
+
+@media (max-width: 1130px) {
+    .content-heading {
+        margin: 0 5vw;
+    }
+
+    .content .anime-list {
+        margin: 0 5vw;
+    }
+}
+
+@media (max-width: 1050px) {
+    .content .anime-list {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 15vw;
+        column-gap: 0px;
+        row-gap: 0px;
+    }
+
+    .anime-list .anime {
+        display: grid;
+        grid-template-columns: 185px auto;
+        margin-top: 20px !important;
+        padding-left: unset !important;
+        height: 265px;
+        min-width: 370px;
+    }
+
+    .cover {
+        width: unset !important;
+        position: unset;
+        height: 265px;
+    }
+
+    .info-body {
+        width: unset !important;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: auto 42px;
+        min-height: 0px;
+        min-width: 0px;
+        line-height: 1rem;
+    }
+
+    .content-heading {
+        margin: 0 15vw;
+    }
+}
+
+@media (max-width: 800px) {
+    .header {
+        background: none;
+        height: unset;
+        bottom: 0;
+        position: fixed;
+        width: 100%;
+        padding-top: 30px;
+    }
+
+    .wrap {
+        display: grid;
+        justify-items: center;
+        margin: 0px;
+        grid-template-columns: auto 55px;
+        padding: 18px;
+        position: relative;
+    }
+
+    .wrap img {
+        display: none;
+    }
+
+    .relative {
+        position: relative;
+    }
+
+    .wrap .seasons {
+        color: #c8caef;
+        position: relative;
+        width: 100%;
+        background: #2b2d42;
+        align-content: center;
+        border-radius: 5px;
+        display: flex;
+        height: 55px;
+        justify-content: space-evenly;
+    }
+
+    .wrap .other {
+        background: #2b2d42;
+        color: #c8caef;
+        float: right;
+        display: block;
+        /* position: absolute; */
+        /* width: 100%; */
+        display: flex;
+        align-content: center;
+        border-radius: 5px;
+        height: 55px;
+        justify-content: space-evenly;
+    }
+
+    .wrap .other a {
+        display: none;
+    }
+
+    .wrap .other .icon {
+        display: inline-block;
+        color: inherit;
+        /* fill: none; */
+        vertical-align: middle;
+    }
+
+    .content {
+        margin-top: unset;
+    }
+
+    .content-heading {
+        padding: 0 20px;
+        color: inherit;
+        margin: 0 10px;
+    }
+
+    .filter {
+        display: none;
+    }
+
+    .other-filter {
+        display: unset;
+        color: #777a9e;
+        display: grid;
+        grid-template-columns: auto 42px;
+        justify-items: center;
+        letter-spacing: normal;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .other-filter .input {
+        background: rgb(193, 148, 236);
+        width: 100%;
+        border: 0;
+        box-shadow: none;
+        height: 40px;
+        padding: 0 15px;
+        line-height: 40px;
+        font-weight: 600;
+        color: rgb(92, 114, 138);
+        border-radius: 3px;
+    }
+
+    .content .anime-list {
+        display: flex;
+        flex-direction: column;
+        margin: 0 10px;
+        row-gap: 0px;
+        column-gap: 0px;
+    }
+
+    .cover {
+        width: unset !important;
+        position: unset;
+        height: 265px;
+    }
+
+    .info-body {
+        width: unset !important;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: auto 42px;
+        height: 265px;
+        line-height: 1rem;
+    }
+
+    .anime-list .anime {
+        display: grid;
+        grid-template-columns: 185px auto;
+        margin: 20px 0 0 0 !important;
+        padding-left: unset !important;
+    }
+
+    /* .tag {
+        margin-top: 23px;
+    } */
+}
+
+@media (max-width: 380px) {
+    .seasons a {
+        width: unset;
+    }
+
+    .content .anime-list {
+        row-gap: 50px;
+    }
+
+    .anime-list .anime {
+        display: grid;
+        grid-template-columns: 150px auto;
+        height: 230px;
+        min-width: 320px;
+        margin-top: unset !important;
+    }
+
+    .description {
+        overflow: hidden;
+        height: 80px;
+    }
+}
